@@ -37,7 +37,7 @@ IPv4 Address. . . . . . . . . . . : 10.0.0.30
 ```
 ALLOWED_HOSTS = ['YOUR_IP_ADDRESS']
 ```
-10. Go back to WSL and type:
+10. Go back to WSL and cd into Fur-Finder-Backend then type:
 ```
 python manage.py runserver YOUR_IP_ADDRESS:8000
 ```
