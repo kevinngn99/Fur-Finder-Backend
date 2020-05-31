@@ -25,11 +25,15 @@ pip install django-cors-headers
 ```
 git clone https://github.com/kevinngn99/Fur-Finder-Backend.git
 ```
-7. Then cd into 'Fur-Finder-Backend' and run this (ignore the red errors):
+7. Open command prompt and type:
 ```
-python manage.py runserver
+ipconfig
 ```
-8. Open browser and type:
+8. Look for your IPv4 Address and copy it:
 ```
-http://127.0.0.1:8000/
+IPv4 Address. . . . . . . . . . . : 10.0.0.30
+```
+9. Go back to WSL and type:
+```
+python manage.py runserver YOUR_IP_ADDRESS:8000
 ```
