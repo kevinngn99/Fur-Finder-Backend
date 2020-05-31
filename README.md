@@ -33,7 +33,11 @@ ipconfig
 ```
 IPv4 Address. . . . . . . . . . . : 10.0.0.30
 ```
-9. Go back to WSL and type:
+9. Open settings.py in the FurFinderSITE folder in a code editor and go to line 129. Replace the ip address there:
+```
+ALLOWED_HOSTS = ['YOUR_IP_ADDRESS']
+```
+10. Go back to WSL and type:
 ```
 python manage.py runserver YOUR_IP_ADDRESS:8000
 ```
