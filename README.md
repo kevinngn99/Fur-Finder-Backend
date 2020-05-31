@@ -17,15 +17,19 @@ pip install django
 ```
 pip install djangorestframework
 ```
-5. Clone this repo:
+5. Install CORS:
+```
+pip install django-cors-headers
+```
+6. Clone this repo:
 ```
 git clone https://github.com/kevinngn99/Fur-Finder-Backend.git
 ```
-6. Then cd into 'Fur-Finder-Backend' and run this (ignore the red errors):
+7. Then cd into 'Fur-Finder-Backend' and run this (ignore the red errors):
 ```
 python manage.py runserver
 ```
-7. Open browser and type:
+8. Open browser and type:
 ```
 http://127.0.0.1:8000/
 ```
