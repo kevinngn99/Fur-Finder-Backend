@@ -45,3 +45,7 @@ python manage.py runserver YOUR_IP_ADDRESS:8000
 ```
 YOUR_IP_ADDRESS:8000
 ```
+12. Install bs4 (beautifulSoup4):
+```
+pip install beautifulsoup4
+```
