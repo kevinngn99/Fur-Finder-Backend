@@ -45,3 +45,11 @@ python manage.py runserver YOUR_IP_ADDRESS:8000
 ```
 YOUR_IP_ADDRESS:8000
 ```
+12. install Beautiful Soup 4:
+```
+pip install beautifulsoup4
+```
+13. xml Parser:
+```
+pip install lxml
+```
