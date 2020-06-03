@@ -49,7 +49,7 @@ YOUR_IP_ADDRESS:8000
 ```
 pip install beautifulsoup4
 ```
-13. xml Parser:
+13. lxml Parser:
 ```
 pip install lxml
 ```
