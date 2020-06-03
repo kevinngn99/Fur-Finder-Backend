@@ -1,7 +1,10 @@
 from bs4 import BeautifulSoup
 import requests
 
-source = requests.get('https://www.lostmydoggie.com/missing-pets.cfm?startr1=1&page_number=1&petkindid=1&alerttypeid=1,3&zipcode=92603&radius=50&sort=OrderDate').text
+zipcode = input('Enter zip code: ')
+url = 'https://www.lostmydoggie.com/missing-pets.cfm?startr1=1&page_number=1&petkindid=1&alerttypeid=1,3&zipcode=' + zipcode + '&radius=50&sort=OrderDate'
+
+source = requests.get(url).text
 soup = BeautifulSoup(source, 'lxml')
 
 header = soup.find('div', {'class': 'col-lg-12 bg-darkcolor'}).font.text
