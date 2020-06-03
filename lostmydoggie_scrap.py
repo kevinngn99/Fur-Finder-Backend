@@ -15,7 +15,7 @@ for column in soup.find_all('div', {'class': 'col-md-3'}):
 
     name = info.h4.text
     status = info.h6.span.font.text
-    gender = info.h6.text.split(status)[1].split('\xa0')[1]
+    gender = info.h6.text.split(status)[1]
     location = info.h6.find_next_sibling('h6').find(text=True)
     zc = info.h6.find_next_sibling('h6').text.split(location)[1]
     breed = detail.li.text.split('\n')[0]
