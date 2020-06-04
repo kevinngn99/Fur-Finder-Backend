@@ -39,9 +39,12 @@ for container in containers:
         inIndex=str(city).index("in")# finds the word 'in' indicating the start of the state
         date=dates[index].text
 
-        print("NAME:", name)
+        print("NAME:", str(name)[1:len(str(name))-1])
         print("CITY:", str(city)[inIndex+2:commaIndex]+',' +str(city)[commaIndex+2:commaIndex+4])
-        print("DATE LOST:", date)
+        print("DATE LOST:", str(date)[1:8])
+        print ("Breed:" ,str(city)[14:inIndex-1] )
+        print("Status:"," Lost")
+
 
         print ("")
 
