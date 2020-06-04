@@ -9,8 +9,8 @@ def get_url(n, p, z):
     mid2 = '&petkindid=1&alerttypeid=1,3&zipcode='
     zipcode = z
     end = '&radius=50&sort=OrderDate'
-    
-    url = begin + str(num) + mid1 + str(page) + mid2 + zipcode + end
+
+    url = begin + str(num) + mid1 + str(page) + mid2 + str(zipcode) + end
     return url
 
 if __name__ == "__main__":
