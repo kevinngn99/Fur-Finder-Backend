@@ -38,6 +38,9 @@ for container in containers:
         commaIndex=str(city).find(",")#finds the only comma indicating the state
         inIndex=str(city).index("in")# finds the word 'in' indicating the start of the state
         date=dates[index].text
+        iDIndex = str(cities[index].contents[1]).index("id=")
+        ID=str(cities[index].contents[1])[iDIndex+3:iDIndex+9]
+        imgURL="https://www.tabbytracker.com/image.php?id="+str(ID)+"&rand=4367"
 
 
         print("NAME:", str(name)[1:len(str(name))-1])
@@ -45,6 +48,8 @@ for container in containers:
         print("DATE LOST:", str(date)[1:8])
         print ("Breed:" ,str(city)[14:inIndex-1] )
         print("Status:"," Lost")
+        print("ImgUrl:",imgURL)
+        print("ID:", ID)
 
 
         print ("")
