@@ -1,8 +1,10 @@
 from bs4 import BeautifulSoup
 from urllib import  urlopen
+#ask for zipCode
+ZipCode=input("enter ZipCode: ")
 
 #sets url to desired webpage
-url="https://www.fidofinder.com/lost-dogs/"
+url="https://www.fidofinder.com/lost-dogs/?postal="+str(ZipCode)
 
 
 #downloads webpage
@@ -25,16 +27,25 @@ for container in containers:
     #searches the html for the pets info
     names = container.findAll("div",{"class":"profileboxname"})
     cities =container.findAll("div","profilebox")
+
+
+
     dates = container.findAll("div","profileboxdate")
 
     for index in range(0,len(names)):
         name=names[index].text
-        city=cities[index].div.img
+        city=cities[index].contents[1].contents[1].contents[0]
+        commaIndex=str(city).find(",")#finds the only comma indicating the state
+        inIndex=str(city).index("in")# finds the word 'in' indicating the start of the state
         date=dates[index].text
-        #breed=
+
         print("NAME:", name)
-        print("CITY:", city)
+        print("CITY:", str(city)[inIndex+2:commaIndex]+',' +str(city)[commaIndex+2:commaIndex+4])
         print("DATE LOST:", date)
+
+        print ("")
+
+
 
 #print (page_soup)
 
