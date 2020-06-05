@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from urllib import urlopen
+import requests
 
 # ask for zipCode
 ZipCode = input("enter ZipCode: ")
@@ -7,16 +7,10 @@ ZipCode = input("enter ZipCode: ")
 # sets url to desired webpage
 url = "https://www.fidofinder.com/lost-dogs/?postal=" + str(ZipCode)
 
-# downloads webpage
-Client = urlopen(url)
 
-html = Client.read()
-
-# closes the Webclient
-Client.close()
 
 # uses bs4 to parse the HTML
-page_soup = BeautifulSoup(html, "html.parser")
+page_soup = BeautifulSoup(requests.get(url).text,features="lxml")
 
 containers = page_soup.findAll("div", {"class": "row section"})
 
