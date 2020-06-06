@@ -1,6 +1,8 @@
 from bs4 import BeautifulSoup
 import requests
+import urllib.parse
 import re
+import json
 
 def get_key(num):
     return 'gvOrgPets_lblStatusDesc_' + str(num)
@@ -9,11 +11,25 @@ if __name__ == "__main__":
     url = 'https://www.helpinglostpets.com/v2/OrgPet.aspx?oid=669'
     soup = BeautifulSoup(requests.get(url).text, 'lxml')
 
+    form = soup.find('form')
     fields = soup.findAll('input')
     formdata = dict((field.get('name'), field.get('value')) for field in fields)
+    formdata['__EVENTTARGET'] = 'ddlStatus'
+    formdata['__EVENTARGUMENT'] = ''
+    formdata['__LASTFOCUS'] = ''
     formdata['ddlStatus'] = '2'
+    formdata['ddlSpecies'] = ''
+    formdata['ddlGender'] = ''
+    formdata['ddlAges'] = '0'
+    formdata['txtColor'] = ''
+    formdata['ddlProvince'] = '- All -'
+    formdata['chkShow1Org'] = 'on'
+    formdata['ddlRank'] = 'helpid'
+    formdata['ddlPageSize'] = '100'
+    formdata['hiddenInputToUpdateATBuffer_CommonToolkitScripts'] = '0'
 
-    post = requests.post(url, data=formdata)
+    postURL = urllib.parse.urljoin(url, form['action'])
+    soup = BeautifulSoup(requests.post(postURL, data=formdata).text, 'lxml')
 
     num = 0
 
