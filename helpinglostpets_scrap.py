@@ -8,6 +8,13 @@ def get_key(num):
 if __name__ == "__main__":
     url = 'https://www.helpinglostpets.com/v2/OrgPet.aspx?oid=669'
     soup = BeautifulSoup(requests.get(url).text, 'lxml')
+
+    fields = soup.findAll('input')
+    formdata = dict((field.get('name'), field.get('value')) for field in fields)
+    formdata['ddlStatus'] = '2'
+
+    post = requests.post(url, data=formdata)
+
     num = 0
 
     while (status := soup.find('span', {'id': get_key(num)})) != None:
