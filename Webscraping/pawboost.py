@@ -17,7 +17,10 @@ containers = page_soup.select("#w0")
 
 for index in range(1,len(containers[0].contents)-1,2):
     name = containers[0].contents[index].div.div.h2.text
+    breed = containers[0].contents[index].select("div > div > div > h2 > small")
+    breed=str(breed)[61:69]+""+str(breed)[93:102]
     name=str(name)[25:35]
+
     city = containers[0].contents[index].div.div.h3.text
     date=containers[0].contents[index].div.p.text
     id=containers[0].contents[index].select(" div > div > div > p:nth-child(4) > small")
@@ -27,11 +30,13 @@ for index in range(1,len(containers[0].contents)-1,2):
     imgURL=containers[0].contents[index].select(" div > div > a > div ")
     imageindex = str(imgURL).index("src=")
     jpgindex=str(imgURL).index("/>")
-    print (name)
-    print (city)
-    print (date)
-    print (str(id)[idindex+8:idindex+15])
-    print (str(imgURL)[imageindex+5:jpgindex])
+    print ("Name: ",name)
+    print("Breed: ",breed)
+    print ("City: ",city)
+    print ("Date Lost : ",date)
+    print ("ID : ",str(id)[idindex+8:idindex+15])
+    print ("ImgURL: ",str(imgURL)[imageindex+5:jpgindex])
+    print ("\n")
 
 
 # print (page_soup)
