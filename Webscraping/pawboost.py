@@ -19,7 +19,7 @@ for index in range(1,len(containers[0].contents)-1,2):
     name = containers[0].contents[index].div.div.h2.text
     breed = containers[0].contents[index].select("div > div > div > h2 > small")
     breed=str(breed)[61:69]+""+str(breed)[93:102]
-    name=str(name)[25:35]
+    name=name.encode('utf-8')[25:35]
 
     city = containers[0].contents[index].div.div.h3.text
     date=containers[0].contents[index].div.p.text
