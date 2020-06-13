@@ -8,8 +8,10 @@ colorama
 contextlib2
 distlib
 distro
+dj-database-url
 Django
 django-cors-headers
+django-heroku
 djangorestframework
 html5lib
 idna
@@ -20,6 +22,7 @@ msgpack
 packaging
 pep517
 progress
+psycopg2
 pyparsing
 pytoml
 pytz
@@ -30,3 +33,4 @@ soupsieve
 sqlparse
 urllib3
 webencodings
+whitenoise
