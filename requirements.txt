@@ -13,6 +13,7 @@ Django
 django-cors-headers
 django-heroku
 djangorestframework
+gunicorn
 html5lib
 idna
 ipaddr
