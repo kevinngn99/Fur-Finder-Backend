@@ -1,125 +1,154 @@
-import tensorflow as tf
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Conv2D, Flatten, Dropout, MaxPooling2D
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
-import cv2
-from tensorflow.keras.models import load_model
-
-
 import os
-import numpy as np
+
 import matplotlib.pyplot as plt
+import tensorflow as tf
+import tensorflow_hub as hub  # can pip install
+from keras_preprocessing.image import load_img, img_to_array, np
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
-def prepare(filepath):
-    IMG_SIZE = 50  # 50 in txt-based
-    img_array = cv2.imread(filepath, cv2.IMREAD_GRAYSCALE)  # read in the image, convert to grayscale
-    new_array = cv2.resize(img_array, (400, 200))  # resize image to match model's expected sizing
-    return new_array.reshape(80000,1,1,1)  # return the image with shaping that TF wants.
+# load and prepare the image
+from tensorflow.python.keras.models import load_model
 
+
+def load_image(filename):
+    # load the image
+    img = load_img(filename, target_size=(224, 224))
+    # convert to array
+    img = img_to_array(img)
+    # reshape into a single sample with 3 channels
+    img = img.reshape(1, 224, 224, 3)
+    # center pixel data
+    img = img.astype('float32')
+    img = img - [123.68, 116.779, 103.939]
+    return img
+
+
+# for plotting images (optional)
+def plotImages(images_arr):
+    fig, axes = plt.subplots(1, 5, figsize=(20, 20))
+    axes = axes.flatten()
+    for img, ax in zip(images_arr, axes):
+        ax.imshow(img)
+    plt.tight_layout()
+    plt.show()
+
+
+# getting data
 _URL = 'https://storage.googleapis.com/mledu-datasets/cats_and_dogs_filtered.zip'
 
 path_to_zip = tf.keras.utils.get_file('cats_and_dogs.zip', origin=_URL, extract=True)
 
 PATH = os.path.join(os.path.dirname(path_to_zip), 'cats_and_dogs_filtered')
-print(PATH)
 
-train_dir = os.path.join(PATH, 'train')
-validation_dir = os.path.join(PATH, 'validation')
+base_dir = PATH
+train_dir = os.path.join(base_dir, 'train')
+validation_dir = os.path.join(base_dir, 'validation')
 
-train_cats_dir = os.path.join(train_dir, 'cats')  # directory with our training cat pictures
-train_dogs_dir = os.path.join(train_dir, 'dogs')  # directory with our training dog pictures
-validation_cats_dir = os.path.join(validation_dir, 'cats')  # directory with our validation cat pictures
-validation_dogs_dir = os.path.join(validation_dir, 'dogs')  # directory with our validation dog pictures
+train_cats = os.path.join(train_dir, 'cats')
+train_dogs = os.path.join(train_dir, 'dogs')
+validation_cats = os.path.join(validation_dir, 'cats')
+validation_dogs = os.path.join(validation_dir, 'dogs')
 
-num_cats_tr = len(os.listdir(train_cats_dir))
-num_dogs_tr = len(os.listdir(train_dogs_dir))
-
-num_cats_val = len(os.listdir(validation_cats_dir))
-num_dogs_val = len(os.listdir(validation_dogs_dir))
+num_cats_tr = len(os.listdir(train_cats))
+num_dogs_tr = len(os.listdir(train_dogs))
+num_cats_val = len(os.listdir(validation_cats))
+num_dogs_val = len(os.listdir(validation_dogs))
 
 total_train = num_cats_tr + num_dogs_tr
 total_val = num_cats_val + num_dogs_val
 
-print('total training cat images:', num_cats_tr)
-print('total training dog images:', num_dogs_tr)
+BATCH_SIZE = 5
+IMG_SHAPE = 224  # match image dimension to mobile net input
 
-print('total validation cat images:', num_cats_val)
-print('total validation dog images:', num_dogs_val)
-print("--")
-print("Total training images:", total_train)
-print("Total validation images:", total_val)
+# generators
 
-batch_size = 128
-epochs = 3
-IMG_HEIGHT = 150
-IMG_WIDTH = 150
+# prevent memorization
+train_image_generator = ImageDataGenerator(
+    rescale=1. / 255
+)
 
-train_image_generator = ImageDataGenerator(rescale=1./255) # Generator for our training data
-validation_image_generator = ImageDataGenerator(rescale=1./255) # Generator for our validation data
+validation_image_generator = ImageDataGenerator(
+    rescale=1. / 255)
 
-train_data_gen = train_image_generator.flow_from_directory(batch_size=batch_size,
+train_data_gen = train_image_generator.flow_from_directory(batch_size=BATCH_SIZE,
                                                            directory=train_dir,
                                                            shuffle=True,
-                                                           target_size=(IMG_HEIGHT, IMG_WIDTH),
+                                                           target_size=(IMG_SHAPE, IMG_SHAPE),
                                                            class_mode='binary')
 
-val_data_gen = validation_image_generator.flow_from_directory(batch_size=batch_size,
-                                                              directory=validation_dir,
-                                                              target_size=(IMG_HEIGHT, IMG_WIDTH),
-                                                              class_mode='binary')
+val_data_gen = train_image_generator.flow_from_directory(batch_size=BATCH_SIZE,
+                                                         directory=validation_dir,
+                                                         shuffle=False,
+                                                         target_size=(IMG_SHAPE, IMG_SHAPE),
+                                                         class_mode='binary')
 
-sample_training_images, _ = next(train_data_gen)
+# getting MobileNet
+URL = "https://tfhub.dev/google/tf2-preview/mobilenet_v2/feature_vector/4"
+mobile_net = hub.KerasLayer(URL, input_shape=(IMG_SHAPE, IMG_SHAPE, 3))
 
-# This function will plot images in the form of a grid with 1 row and 5 columns where images are placed in each column.
-def plotImages(images_arr):
-    fig, axes = plt.subplots(1, 5, figsize=(20,20))
-    axes = axes.flatten()
-    for img, ax in zip( images_arr, axes):
-        ax.imshow(img)
-        ax.axis('off')
-    plt.tight_layout()
-    plt.show()
+mobile_net.trainable = False
 
-
-model = Sequential([
-    Conv2D(16, 3, padding='same', activation='relu', input_shape=(IMG_HEIGHT, IMG_WIDTH ,3)),
-    MaxPooling2D(),
-    Conv2D(32, 3, padding='same', activation='relu'),
-    MaxPooling2D(),
-    Conv2D(64, 3, padding='same', activation='relu'),
-    MaxPooling2D(),
-    Flatten(),
-    Dense(512, activation='relu'),
-    Dense(1)
+model = tf.keras.models.Sequential([
+    mobile_net,
+    tf.keras.layers.Dense(2, activation='softmax')  # [0, 1] or [1, 0]
 ])
 
-
 model.compile(optimizer='adam',
-              loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
+              loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
 model.summary()
 
+EPOCHS = 10
+
+#THIS COMMENTED PART DOES THE ACTUAL TRAINING I'VE COMMENTED IT
+#BECASUE THE MODEL HAS ALREADY BEEN TRIANED AND CAN BE FOUND IN THE CAT_DOG_MODEL DIRECTORY
 
 
-#
 # history = model.fit_generator(
 #     train_data_gen,
-#     steps_per_epoch=total_train // batch_size,
-#     epochs=epochs,
+#     steps_per_epoch=int(np.ceil(total_train / float(BATCH_SIZE))),
+#     epochs=EPOCHS,
 #     validation_data=val_data_gen,
-#     validation_steps=total_val // batch_size
-# )
-
-probability_model = tf.keras.models.load_model("cat_dog_model.h5")
-
-predictions = probability_model.predict([prepare("/Users/darkswordss/.keras/datasets/cats_and_dogs_filtered/train/cats/cat.13.jpg")])
-
-print(predictions)
-
-model.save('cat_dog_model.h5')  # creates a HDF5 file 'my_model.h5'
-
-model_file = "cat_dog_model.h5"
+#     validation_steps=int(np.ceil(total_val / float(BATCH_SIZE)))
+#     )
+# model.save("cat_dog_model")
 
 
-print("here")
+
+#loads the trained model
+model = load_model("cat_dog_model")
+
+
+#FOR TESTING MAKE TWO DIRECTORTY AND POPULATE THEM WITH TEST IMAGES IN THE FORMAT OF "dog0.jpg"
+for index in range(6):
+
+    fileCounter = index
+    #modify the path below for your pc
+    filePath1 = "../TestImages/Dog/dog" + str(fileCounter) + ".jpg"
+    filePath2 = "../TestImages/Cat/cat" + str(fileCounter) + ".jpg"
+    catTest = model.predict(load_image(filePath2))
+    dogTest = model.predict(load_image(filePath1))
+
+    if dogTest[0][1] > 0.5:
+        print("Prediction: Dog", "Actual: Dog")
+    else:
+        print("Prediction: Cat", "Actual: Dog")
+    print("Dog Results: ", dogTest)
+
+    if catTest[0][1] > 0.5:
+        print("Prediction: Dog", "Actual: Cat")
+    else:
+        print("Prediction: Cat", "Actual: Cat")
+    print("Cat Results: ", catTest)
+
+    print("\n")
+
+
+
+
+
+
+
+
+
