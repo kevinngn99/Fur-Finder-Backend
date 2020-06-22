@@ -10,11 +10,11 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.python.keras.models import load_model
 
 # getting data
-_URL = 'https://storage.googleapis.com/mledu-datasets/cats_and_dogs_filtered.zip'
+# _URL = 'https://storage.googleapis.com/mledu-datasets/cats_and_dogs_filtered.zip'
+#
+# path_to_zip = tf.keras.utils.get_file('cats_and_dogs.zip', origin=_URL, extract=True)
 
-path_to_zip = tf.keras.utils.get_file('cats_and_dogs.zip', origin=_URL, extract=True)
-
-PATH = os.path.join(os.path.dirname(path_to_zip), 'cats_and_dogs_filtered')
+PATH = os.path.join(os.path.dirname("/Users/darkswordss/.keras/datasets/cats_and_dogs_filtered"), 'cats_and_dogs_filtered')
 
 base_dir = PATH
 train_dir = os.path.join(base_dir, 'train')
@@ -22,16 +22,20 @@ validation_dir = os.path.join(base_dir, 'validation')
 
 train_cats = os.path.join(train_dir, 'cats')
 train_dogs = os.path.join(train_dir, 'dogs')
+train_turtles = os.path.join(train_dir, 'turtles')
 validation_cats = os.path.join(validation_dir, 'cats')
 validation_dogs = os.path.join(validation_dir, 'dogs')
+validation_turtles = os.path.join(validation_dir, 'turtles')
 
 num_cats_tr = len(os.listdir(train_cats))
 num_dogs_tr = len(os.listdir(train_dogs))
+num_turtles_tr = len(os.listdir(train_turtles))
 num_cats_val = len(os.listdir(validation_cats))
 num_dogs_val = len(os.listdir(validation_dogs))
+num_turtles_val = len(os.listdir(validation_turtles))
 
-total_train = num_cats_tr + num_dogs_tr
-total_val = num_cats_val + num_dogs_val
+total_train = num_cats_tr + num_dogs_tr+num_turtles_tr
+total_val = num_cats_val + num_dogs_val+num_turtles_val
 
 BATCH_SIZE = 5
 IMG_SHAPE = 224  # match image dimension to mobile net input
@@ -66,7 +70,7 @@ mobile_net.trainable = False
 
 model = tf.keras.models.Sequential([
     mobile_net,
-    tf.keras.layers.Dense(2, activation='softmax')  # [0, 1] or [1, 0]
+    tf.keras.layers.Dense(3, activation='softmax')  # [0, 1] or [1, 0]
 ])
 
 model.compile(optimizer='adam',
@@ -75,7 +79,7 @@ model.compile(optimizer='adam',
 
 model.summary()
 
-EPOCHS = 10
+EPOCHS = 5
 
 
 
