@@ -1,14 +1,11 @@
 from keras_preprocessing.image import load_img, img_to_array, np
 from tensorflow.python.keras.models import load_model
 import shutil
-import requests
+import urllib.request
 
 url = 'https://images.pexels.com/photos/1170986/pexels-photo-1170986.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500'
 url=input("Enter image URL:")
-response = requests.get(url, stream=True)
-with open('img.png', 'wb') as out_file:
-    shutil.copyfileobj(response.raw, out_file)
-del response
+urllib.request.urlretrieve(url,"img.png")
 
 
 
@@ -31,14 +28,12 @@ perdiction = model.predict(load_image("img.png"))
 
 if perdiction[0][1] > 0.5:
     print("Prediction: Dog")
-else:
+elif perdiction[0][0]>0.5:
     print("Prediction: Cat")
+else: print("Prediction: Turtle")
 print("Probability: ", perdiction)
 
 print("\n")
-
-
-
 
 
 
