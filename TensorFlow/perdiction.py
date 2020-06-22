@@ -3,10 +3,12 @@ from tensorflow.python.keras.models import load_model
 import shutil
 import urllib.request
 
-url = 'https://images.pexels.com/photos/1170986/pexels-photo-1170986.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500'
-url=input("Enter image URL:")
-urllib.request.urlretrieve(url,"img.png")
 
+
+
+def getImageFromInternet(url):
+
+    urllib.request.urlretrieve(url, "img.png")
 
 
 def load_image(filename):
@@ -24,18 +26,26 @@ def load_image(filename):
 
 #loads the trained model
 model = load_model("cat_dog_model")
-perdiction = model.predict(load_image("img.png"))
-
-if perdiction[0][1] > 0.5:
-    print("Prediction: Dog")
-elif perdiction[0][0]>0.5:
-    print("Prediction: Cat")
-else: print("Prediction: Turtle")
-print("Probability: ", perdiction)
-
-print("\n")
 
 
+def getPerdiction():
+    perdiction = model.predict(load_image("img.png"))
+    if perdiction[0][1] > 0.5:
+        print("Prediction: Dog")
+    elif perdiction[0][0]>0.5:
+        print("Prediction: Cat")
+    else: print("Prediction: Turtle")
+    print("Probability: ", perdiction)
+
+    print("\n")
+
+
+
+if __name__ == '__main__':
+    while True:
+        url = input("Enter image URL:")
+        getImageFromInternet(url)
+        getPerdiction()
 
 
 

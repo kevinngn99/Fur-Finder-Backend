@@ -62,7 +62,10 @@ val_data_gen = train_image_generator.flow_from_directory(batch_size=BATCH_SIZE,
                                                          target_size=(IMG_SHAPE, IMG_SHAPE),
                                                          class_mode='binary')
 
+
 # getting MobileNet
+
+
 URL = "https://tfhub.dev/google/tf2-preview/mobilenet_v2/feature_vector/4"
 mobile_net = hub.KerasLayer(URL, input_shape=(IMG_SHAPE, IMG_SHAPE, 3))
 
@@ -90,6 +93,7 @@ history = model.fit_generator(
     epochs=EPOCHS,
     validation_data=val_data_gen,
     validation_steps=int(np.ceil(total_val / float(BATCH_SIZE)))
+
     )
 model.save("cat_dog_model")
 
@@ -110,7 +114,6 @@ plt.plot(epochs_range, acc, label='Training Accuracy')
 plt.plot(epochs_range, val_acc, label='Validation Accuracy')
 plt.legend(loc='lower right')
 plt.title('Training and Validation Accuracy')
-
 plt.subplot(1, 2, 2)
 plt.plot(epochs_range, loss, label='Training Loss')
 plt.plot(epochs_range, val_loss, label='Validation Loss')
