@@ -37,7 +37,7 @@ num_turtles_val = len(os.listdir(validation_turtles))
 total_train = num_cats_tr + num_dogs_tr+num_turtles_tr
 total_val = num_cats_val + num_dogs_val+num_turtles_val
 
-BATCH_SIZE = 5
+BATCH_SIZE = 20
 IMG_SHAPE = 224  # match image dimension to mobile net input
 
 # generators
@@ -82,7 +82,7 @@ model.compile(optimizer='adam',
 
 model.summary()
 
-EPOCHS = 5
+EPOCHS = 10
 
 
 
