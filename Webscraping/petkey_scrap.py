@@ -1,5 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
+from prediction import predictor
+
 
 #Scraper for https://petkey.org
 
@@ -52,7 +54,9 @@ def get_info(links):
             attribute = str(info.text).split('\n')[1]
             key = str(info.text).split('\n')[2]
             pet_info[attribute] = key
+        image_link = image_link.replace("\"","")
         pet_info['image'] = image_link
+        pet_info['species'] = predictor(image_link)
         print(pet_info)
 
 
