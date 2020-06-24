@@ -13,8 +13,8 @@ def get_url(n, p, z):
     url = begin + str(num) + mid1 + str(page) + mid2 + str(zipcode) + end
     return url
 
-if __name__ == "__main__":
-    zipcode = input('Enter zip code: ')
+def lostmydoggie(zipcode_):
+    zipcode = zipcode_
     url = get_url(1, 1, zipcode)
     soup = BeautifulSoup(requests.get(url).text, 'lxml')
 
@@ -54,6 +54,16 @@ if __name__ == "__main__":
             print('Breed: ', breed)
             print('Color: ', color)
             print(date)
+
+            myjson = {
+            "name": name,
+            "gender": gender,
+            "age": "N/A",
+            "breed": breed,
+            "size": "N/A",
+            "dob": "N/A"
+            }
+            requests.post(url = 'http://10.2.0.251:8000/api/pets/', json = myjson)
             
         page += 1
         soup = BeautifulSoup(requests.get(get_url(num, page, zipcode)).text, 'lxml')

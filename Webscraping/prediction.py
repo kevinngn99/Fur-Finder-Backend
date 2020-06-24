@@ -2,6 +2,10 @@ from keras_preprocessing.image import load_img, img_to_array, np
 from tensorflow.python.keras.models import load_model
 import shutil
 import urllib.request
+import os
+
+import sys
+sys.path.append('../')
 
 
 def getImageFromInternet(url):
@@ -28,7 +32,16 @@ def getPerdiction(model):
     elif perdiction[0][0]>0.5:
         return("Cat")
 
+
+#Predictor is built to be called from scrapers/
 def predictor(url):
+    #print(os.listdir('../'))
+    model = load_model("../cat_dog_model")
+    getImageFromInternet(url)
+    return getPerdiction(model)
+
+#Prediction is NOT built to be called from scrapers/
+def prediction():
     model = load_model("cat_dog_model")
     getImageFromInternet(url)
     return getPerdiction(model)

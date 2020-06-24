@@ -7,7 +7,7 @@ import json
 def get_key(num):
     return 'gvOrgPets_lblStatusDesc_' + str(num)
 
-if __name__ == "__main__":
+def helpinglostpets():
     url = 'https://www.helpinglostpets.com/v2/OrgPet.aspx?oid=669'
     soup = BeautifulSoup(requests.get(url).text, 'lxml')
 
@@ -61,3 +61,13 @@ if __name__ == "__main__":
         print('Color: ', color.text)
 
         num += 1
+
+        myjson = {
+                "name": name,
+                "gender": gender.text,
+                "age": age.text,
+                "breed": re.sub('[^A-Za-z]+', ' ', breed.text),
+                "size": size.text,
+                "dob": "N/A"
+        }
+        requests.post(url = 'http://10.2.0.251:8000/api/pets/', json = myjson)

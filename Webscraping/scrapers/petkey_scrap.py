@@ -1,13 +1,15 @@
 from bs4 import BeautifulSoup
 import requests
-from prediction import predictor
 
+#If you use the predictor
+#import sys
+#sys.path.append('../')
+#from prediction import predictor
 
 #Scraper for https://petkey.org
 
 #Links for https://petkey.org/lost-pets/zip/{ENTERED_ZIP}
-def get_links_local(links):
-    zipcode = input("Enter your zipcode: ")
+def get_links_local(links, zipcode):
     zipLink = 'https://petkey.org/lost-pets/zip/' + zipcode +'/'
     
     source = requests.get(zipLink).text
@@ -56,15 +58,26 @@ def get_info(links):
             pet_info[attribute] = key
         image_link = image_link.replace("\"","")
         pet_info['image'] = image_link
-        pet_info['species'] = predictor(image_link)
-        print(pet_info)
+        #pet_info['species'] = predictor(image_link)
 
+        myjson = {
+            "name": pet_info['Pet Name'],
+            "gender": pet_info['Gender '],
+            "age": pet_info['Age '],
+            "breed": pet_info['Breed '],
+            "size": "N/A",
+            "dob": "N/A"
+        }
 
-def main():
+        requests.post(url = 'http://10.2.0.251:8000/api/pets/', json = myjson)
+        print(myjson)
+
+def petkey(zipcode_):
+    zipcode = zipcode_
     links = []
 
     #Make this change based on the zipcode
-    links = get_links_local(links)
+    links = get_links_local(links, zipcode)
 
     #recently lost pets
     links = get_links(links)
@@ -72,6 +85,4 @@ def main():
     #Read the tables from the links
     get_info(links)
 
-
-if __name__ == "__main__":
-    main()
+petkey("32607")    
