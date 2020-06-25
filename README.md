@@ -53,3 +53,7 @@ pip install beautifulsoup4
 ```
 pip install lxml
 ```
+14.install TensorFlow:
+```
+pip install tensorflow
+```
