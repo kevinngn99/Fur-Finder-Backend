@@ -6,7 +6,12 @@ from bs4 import BeautifulSoup
 from .serializers import PetSerializer, FidoFinderSerializer, HelpingLostPetsSerializer, LostMyDoggieSerializer, PawBoostSerializer, PetKeySerializer, TabbyTrackerSerializer
 from .models import Pet, FidoFinder, HelpingLostPets, LostMyDoggie, PawBoost, PetKey, TabbyTracker
 
-#from Webscraping.scrapers.lostmydoggie_scrap import LostMyDoggie
+from Webscraping.scrapers.fidofinder_scrap import FidoFinderScrap
+from Webscraping.scrapers.helpinglostpets_scrap import HelpingLostPetsScrap
+from Webscraping.scrapers.lostmydoggie_scrap import LostMyDoggieScrap
+from Webscraping.scrapers.pawboost_scrap import PawBoostScrap
+from Webscraping.scrapers.petkey_scrap import PetKeyScrap
+from Webscraping.scrapers.tabbytracker_scrap import TabbyTrackerScrap
 
 class PetViewSet(viewsets.ModelViewSet):
     queryset = Pet.objects.all().order_by('date')
@@ -16,34 +21,94 @@ class FidoFinderSet(viewsets.ModelViewSet):
     queryset = FidoFinder.objects.all().order_by('date')
     serializer_class = FidoFinderSerializer
 
+    def list(self, request):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        new_serializer = list(serializer.data)
+
+        json = FidoFinderScrap().scrap('33990')
+
+        for scrapped in json:
+            new_serializer.append(scrapped)
+        
+        return Response(new_serializer)
+
 class HelpingLostPetsSet(viewsets.ModelViewSet):
     queryset = HelpingLostPets.objects.all().order_by('date')
     serializer_class = HelpingLostPetsSerializer
+
+    def list(self, request):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        new_serializer = list(serializer.data)
+
+        json = HelpingLostPetsScrap().scrap('33990')
+
+        for scrapped in json:
+            new_serializer.append(scrapped)
+        
+        return Response(new_serializer)
 
 class LostMyDoggieSet(viewsets.ModelViewSet):
     queryset = LostMyDoggie.objects.all().order_by('date')
     serializer_class = LostMyDoggieSerializer
 
-    '''def list(self, request):
+    def list(self, request):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True)
         new_serializer = list(serializer.data)
 
-        json = LostMyDoggie().scrap()
+        json = LostMyDoggieScrap().scrap('33990')
 
         for scrapped in json:
             new_serializer.append(scrapped)
         
-        return Response(new_serializer)'''
+        return Response(new_serializer)
 
 class PawBoostSet(viewsets.ModelViewSet):
     queryset = PawBoost.objects.all().order_by('date')
     serializer_class = PawBoostSerializer
+    
+    def list(self, request):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        new_serializer = list(serializer.data)
+
+        json = PawBoostScrap().scrap('33990')
+
+        for scrapped in json:
+            new_serializer.append(scrapped)
+        
+        return Response(new_serializer)
 
 class PetKeySet(viewsets.ModelViewSet):
-    queryset = PetKey.objects.all().order_by('date')
+    queryset = PetKey.objects.all().order_by('name')
     serializer_class = PetKeySerializer
+
+    def list(self, request):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        new_serializer = list(serializer.data)
+
+        json = PetKeyScrap().scrap('33990')
+
+        for scrapped in json:
+            new_serializer.append(scrapped)
+        
+        return Response(new_serializer)
 
 class TabbyTrackerSet(viewsets.ModelViewSet):
     queryset = TabbyTracker.objects.all().order_by('date')
     serializer_class = TabbyTrackerSerializer
+
+    def list(self, request):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        new_serializer = list(serializer.data)
+
+        json = TabbyTrackerScrap().scrap('33990')
+
+        for scrapped in json:
+            new_serializer.append(scrapped)
+        
+        return Response(new_serializer)
