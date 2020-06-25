@@ -32,7 +32,7 @@ for container in containers:
         ID = str(cities[index].contents[1])[iDIndex + 3:iDIndex + 9]
         imgURL = "https://www.fidofinder.com/image.php?id=" + str(ID) + "&rand=4367"
 
-        print("NAME:", str(name)[1:len(str(name)) - 1])
+        print("NAME:", name.encode('utf-8')[1:len((name.encode('utf-8'))) - 1])
         print("CITY:", str(city)[inIndex + 2:commaIndex] + ',' + str(city)[commaIndex + 2:commaIndex + 4])
         print("DATE LOST:", str(date)[1:8])
         print ("Breed:", str(city)[14:inIndex - 1])
