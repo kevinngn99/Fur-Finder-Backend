@@ -109,8 +109,9 @@ class HelpingLostPetsScrap:
 
             while count <= length:
                 num = 0
+                status = soup.find('span', {'id': self.get_key(num)})
 
-                while (status := soup.find('span', {'id': self.get_key(num)})) != None:
+                while status != None:
                     date = status.find_next_sibling('span')
                     location = date.find_next_sibling('span')
 
@@ -153,6 +154,7 @@ class HelpingLostPetsScrap:
                     json.append(dictionary)
 
                     num += 1
+                    status = soup.find('span', {'id': self.get_key(num)})
                 
                 count += 1
                 soup = self.soup(url, og_soup, count)
