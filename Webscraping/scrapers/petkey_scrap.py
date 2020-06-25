@@ -42,6 +42,7 @@ def get_links(links):
 
 def get_info(links):
     for link in links:
+        print('----------------------')
         source = requests.get(link).text
         soup = BeautifulSoup(source, 'lxml')
 
@@ -56,6 +57,7 @@ def get_info(links):
             attribute = str(info.text).split('\n')[1]
             key = str(info.text).split('\n')[2]
             pet_info[attribute] = key
+            print(pet_info[attribute])
         image_link = image_link.replace("\"","")
         pet_info['image'] = image_link
         #pet_info['species'] = predictor(image_link)
@@ -69,8 +71,8 @@ def get_info(links):
             "dob": "N/A"
         }
 
-        requests.post(url = 'http://10.2.0.251:8000/api/pets/', json = myjson)
-        print(myjson)
+        #requests.post(url = 'http://10.2.0.251:8000/api/pets/', json = myjson)
+        #print(myjson)
 
 def petkey(zipcode_):
     zipcode = zipcode_
