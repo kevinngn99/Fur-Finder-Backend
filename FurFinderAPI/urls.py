@@ -4,6 +4,7 @@ from . import views
 
 router = routers.DefaultRouter()
 router.register(r'api/pets', views.PetViewSet)
+router.register(r'api/report', views.imageReportViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

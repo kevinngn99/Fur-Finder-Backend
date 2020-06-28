@@ -8,3 +8,5 @@ class Pet(models.Model):
     size = models.CharField(max_length=128)
     dob = models.CharField(max_length=128)
 
+class imageReport(models.Model):
+    image = models.TextField()

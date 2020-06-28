@@ -46,3 +46,7 @@ def prediction():
     model = load_model("cat_dog_model")
     getImageFromInternet(url)
     return getPerdiction(model)
+
+def reportPrediction():
+    model = load_model("cat_dog_model")
+    return getPerdiction(model) 

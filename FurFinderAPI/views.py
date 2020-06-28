@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.response import Response
-from .serializers import PetSerializer
-from .models import Pet
+from .serializers import PetSerializer, imageReportSerializer
+from .models import Pet, imageReport
 from bs4 import BeautifulSoup
 
 class PetViewSet(viewsets.ModelViewSet):
@@ -26,3 +26,7 @@ class PetViewSet(viewsets.ModelViewSet):
         new_serializer.append(scrapped)
         
         return Response(new_serializer)
+
+class imageReportViewSet(viewsets.ModelViewSet):
+    queryset = imageReport.objects.all()
+    serializer_class = imageReportSerializer
