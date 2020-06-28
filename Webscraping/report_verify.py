@@ -16,3 +16,10 @@ def getImage():
 
 getImage()
 print(reportPrediction())
+
+#How to post the data on the front end
+#post_data = {}
+#with open('img.png', mode='rb') as file:
+#img = file.read()
+#post_data['image'] = base64.encodebytes(img).decode("utf-8")
+#requests.post(url='http://10.2.0.251:8000/api/report/', data=post_data)
