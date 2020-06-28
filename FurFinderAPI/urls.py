@@ -1,9 +1,11 @@
 from django.urls import include, path
 from rest_framework import routers
+from rest_framework.urlpatterns import format_suffix_patterns
+
 from . import views
 
 router = routers.DefaultRouter()
-router.register(r'api/pets/', views.PetViewSet)
+dummy = '''router.register(r'api/pets/', views.PetViewSet.as_view())
 router.register(r'api/fidofinder/', views.FidoFinderSet)
 router.register(r'api/helpinglostpets/', views.HelpingLostPetsSet)
 router.register(r'api/lostmydoggie/', views.LostMyDoggieSet)
@@ -22,4 +24,11 @@ router.register(r'^api/tabbytracker/(?P<zip>[0-9]+)', views.TabbyTrackerSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace = 'rest_framework'))
+]'''
+
+urlpatterns = [
+    path('api/pets/', views.PetViewSet.as_view()),
+    #path('api/pets/<zip>/', views.PetViewSet.as_view()),
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)
