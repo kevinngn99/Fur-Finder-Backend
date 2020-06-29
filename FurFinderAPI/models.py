@@ -10,6 +10,7 @@ class Pet(models.Model):
     zip = models.TextField()
     location = models.TextField()
     breed = models.TextField()
+    image=models.BinaryField()
 
 class FidoFinder(models.Model):
     name = models.TextField()
