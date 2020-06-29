@@ -4,7 +4,7 @@ from .models import Pet, FidoFinder, HelpingLostPets, LostMyDoggie, PawBoost, Pe
 class PetSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Pet
-        fields = ('name', 'gender', 'image', 'breed', 'color', 'date')
+        fields = ('name', 'gender', 'size', 'date', 'age', 'state', 'zip', 'location','breed')
 
 class FidoFinderSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

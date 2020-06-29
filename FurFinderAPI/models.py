@@ -3,10 +3,13 @@ from django.db import models
 class Pet(models.Model):
     name = models.TextField()
     gender = models.TextField()
-    image = models.TextField()
-    breed = models.TextField()
-    color = models.TextField()
+    size = models.TextField()
     date = models.TextField()
+    age = models.TextField()
+    state = models.TextField()
+    zip = models.TextField()
+    location = models.TextField()
+    breed = models.TextField()
 
 class FidoFinder(models.Model):
     name = models.TextField()
