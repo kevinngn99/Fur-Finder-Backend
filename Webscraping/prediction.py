@@ -27,10 +27,11 @@ def load_image(filename):
 
 def getPerdiction(model):
     perdiction = model.predict(load_image("img.png"))
-    if perdiction[0][1] > 0.5:
-        return("Dog")
-    elif perdiction[0][0]>0.5:
-        return("Cat")
+    print(f"{perdiction[0][0]+perdiction[0][1]}% chance it ", end='')
+    if (perdiction[0][0] + perdiction[0][1])>0.60:
+        return "is a pet"
+    else: return "is not a pet"
+
 
 
 #Predictor is built to be called from scrapers/
@@ -41,7 +42,11 @@ def predictor(url):
     return getPerdiction(model)
 
 #Prediction is NOT built to be called from scrapers/
-def prediction():
+def prediction(url):
     model = load_model("cat_dog_model")
     getImageFromInternet(url)
     return getPerdiction(model)
+
+def reportPrediction():
+    model = load_model("cat_dog_model")
+    return getPerdiction(model) 

@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.response import Response
+from .models import Pet, imageReport
 from bs4 import BeautifulSoup
 
-from .serializers import PetSerializer, FidoFinderSerializer, HelpingLostPetsSerializer, LostMyDoggieSerializer, PawBoostSerializer, PetKeySerializer, TabbyTrackerSerializer
+from .serializers import PetSerializer, FidoFinderSerializer, HelpingLostPetsSerializer, LostMyDoggieSerializer, PawBoostSerializer, PetKeySerializer, TabbyTrackerSerializer, imageReportSerializer
 from .models import Pet, FidoFinder, HelpingLostPets, LostMyDoggie, PawBoost, PetKey, TabbyTracker
 
 from Webscraping.scrapers.fidofinder_scrap import FidoFinderScrap
@@ -112,3 +113,7 @@ class TabbyTrackerSet(viewsets.ModelViewSet):
                 new_serializer.append(scrapped)
         
         return Response(new_serializer)
+
+class imageReportViewSet(viewsets.ModelViewSet):
+    queryset = imageReport.objects.all()
+    serializer_class = imageReportSerializer

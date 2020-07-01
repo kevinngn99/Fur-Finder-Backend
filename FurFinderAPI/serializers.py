@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Pet, FidoFinder, HelpingLostPets, LostMyDoggie, PawBoost, PetKey, TabbyTracker
+from .models import Pet, FidoFinder, HelpingLostPets, LostMyDoggie, PawBoost, PetKey, TabbyTracker, imageReport
 
 class PetSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -35,3 +35,8 @@ class TabbyTrackerSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = TabbyTracker
         fields = ('name', 'location', 'date', 'breed', 'status', 'image', 'petid')
+
+class imageReportSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = imageReport
+        fields = '__all__' # all model fields will be included

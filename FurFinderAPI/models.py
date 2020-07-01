@@ -64,3 +64,6 @@ class TabbyTracker(models.Model):
     status = models.TextField()
     image = models.TextField()
     petid = models.TextField()
+    
+class imageReport(models.Model):
+    image = models.TextField()
