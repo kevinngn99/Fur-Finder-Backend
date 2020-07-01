@@ -3,10 +3,14 @@ from django.db import models
 class Pet(models.Model):
     name = models.TextField()
     gender = models.TextField()
-    image = models.TextField()
-    breed = models.TextField()
-    color = models.TextField()
+    size = models.TextField()
     date = models.TextField()
+    age = models.TextField()
+    state = models.TextField()
+    zip = models.TextField()
+    location = models.TextField()
+    breed = models.TextField()
+    image=models.BinaryField()
 
 class FidoFinder(models.Model):
     name = models.TextField()
@@ -64,6 +68,6 @@ class TabbyTracker(models.Model):
     status = models.TextField()
     image = models.TextField()
     petid = models.TextField()
-    
+
 class imageReport(models.Model):
     image = models.TextField()
