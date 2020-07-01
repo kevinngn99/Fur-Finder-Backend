@@ -129,5 +129,5 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 ALLOWED_HOSTS = ['10.0.0.30', '127.0.0.1', '192.168.86.28', '10.253.253.111']
 
-#import django_heroku
-#django_heroku.settings(locals())
+import django_heroku
+django_heroku.settings(locals())
