@@ -19,14 +19,14 @@ from Webscraping.scrapers.petkey_scrap import PetKeyScrap
 from Webscraping.scrapers.tabbytracker_scrap import TabbyTrackerScrap
 
 
-class PetViewSet(APIView):
-    def get(self, request, format=None):
-        queryset = Pet.objects.all().order_by('date')
-        serializer = PetSerializer(queryset, many=True)
-        return Response(serializer.data)
+class PetViewSet(viewsets.ModelViewSet):
+    queryset = Pet.objects.all().order_by('date')
+    serializer_class = PetSerializer
 
     def post(self, request, formant=None):
-        serializer = PetSerializer(data=request.data)
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True, data=request.data)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
