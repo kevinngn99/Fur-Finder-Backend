@@ -1,5 +1,9 @@
 # Fur-Finder-Backend
 
+# Video
+PLEASE WATCH THIS VIDEO DEMONSTRATION AS PROOF:
+https://youtu.be/-nQLWDjr4HA
+
 Do these steps:
 1. Create a folder called 'Backend' on desktop and cd into it from WSL. Then copy and run this:
 ```
