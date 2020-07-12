@@ -42,6 +42,7 @@ class PawBoostScrap:
             petid = detail.parent.text[13:]
             petid = petid.strip()
             zip = city[-5:]
+            size = 'N/A'
 
             #print('----------------')
             #print(age)
@@ -67,6 +68,7 @@ class PawBoostScrap:
                 'location': location,
                 'name': name,
                 'petid': petid,
+                'size': size,
                 'status': status,
                 'zip': zip
             }
@@ -75,5 +77,5 @@ class PawBoostScrap:
 
         return json
 
-if __name__ == "__main__":
-    PawBoostScrap().scrap('33990')
+#if __name__ == "__main__":
+    #PawBoostScrap().scrap('33990')

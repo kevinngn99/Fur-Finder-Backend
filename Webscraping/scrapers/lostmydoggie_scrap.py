@@ -85,6 +85,7 @@ class LostMyDoggieScrap:
                     'location': location,
                     'name': name,
                     'petid': petid,
+                    'size': size,
                     'status': status,
                     'zip': zip
                 }

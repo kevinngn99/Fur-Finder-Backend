@@ -1,5 +1,7 @@
+aiohttp
 appdirs
 asgiref
+async-timeout
 attrs
 autopep8
 beautifulsoup4
@@ -22,6 +24,7 @@ ipaddr
 lockfile
 lxml
 msgpack
+multidict
 packaging
 pathlib-mate
 pep517
@@ -42,3 +45,4 @@ urllib3
 uszipcode
 webencodings
 whitenoise
+yarl
