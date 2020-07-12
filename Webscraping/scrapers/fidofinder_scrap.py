@@ -1,63 +1,118 @@
-from bs4 import BeautifulSoup
 import requests
+import aiohttp
+import asyncio
+
+from bs4 import BeautifulSoup
+from datetime import datetime
 
 class FidoFinderScrap:
-    def scrap(self, zipcode_):
-        # ask for zipCode
-        ZipCode = zipcode_
+    async def fetch(self, session, url):
+        async with session.get(url) as response:
+            assert response.status == 200
+            soup = BeautifulSoup(await response.text(), 'lxml')
 
-        # sets url to desired webpage
-        url = "https://www.fidofinder.com/lost-dogs/?postal=" + str(ZipCode)
+            description = soup.find('span', {'class': 'description'}).findAll(text=True)
 
+            petid = soup.find('h4', {'id': 'idnumber'}).text[4:]
+            age = 'N/A'
+            breed = None
+            color = None
+            format = soup.find('div', {'class': 'row mb-2'}).div.h3.text[:-1][8:]
+            date = datetime.strptime(format, '%m/%d/%Y').strftime('%B %d, %Y')
+            gender = None
+            image = 'https://www.fidofinder.com/image.php?id=' + petid
+            location = None
+            name = soup.find('h2', {'class': 'name'}).text
+            size = 'N/A'
+            status = 'Lost'
+            zip = None
 
-        # uses bs4 to parse the HTML
-        page_soup = BeautifulSoup(requests.get(url).text,features="lxml")
+            if len(description) == 4:
+                gender = description[0][:-1]
+                color = description[1][:-4]
+                breed = 'N/A'
+                location = description[2][:-3]
+                zip = location[-5:]
+                location = location[:-6]
 
-        containers = page_soup.findAll("div", {"class": "row section"})
+                if '&' in color:
+                    color = color[:-1]
+                elif '/' in color:
+                    pos = color.find('(') - 1
+                    color = color[:pos] + color[pos + 1:]
+                else:
+                    color = color.strip()
+            elif len(description) == 5:
+                gender = description[0][:-1]
+                color = description[1]
+                breed = description[2][:-1]
+                location = description[3][:-3]
+                zip = location[-5:]
+                location = location[:-6]
+                
+                if '&' in color:
+                    color = color[:-1]
+                elif '/' in color:
+                    pos = color.find('(') - 1
+                    color = color[:pos] + color[pos + 1:]
+                else:
+                    color = color.strip()
+            elif len(description) == 6:
+                gender = description[0][:-1]
+                color = description[1]
+                breed = description[2] + description[3][:-1]
+                location = description[4][:-3]
+                zip = location[-5:]
+                location = location[:-6]
+                
+                if '&' in color:
+                    color = color[:-1]
+                elif '/' in color:
+                    pos = color.find('(') - 1
+                    color = color[:pos] + color[pos + 1:]
+                else:
+                    color = color.strip()
+            
+            dict = {
+                'age': age,
+                'breed': breed,
+                'color': color,
+                'date': date,
+                'gender': gender,
+                'image': image,
+                'location': location,
+                'name': name,
+                'petid': petid,
+                'size': size,
+                'status': status,
+                'zip': zip
+            }
 
-        json = []
+            return dict
 
-        for container in containers:
-
-            # searches the html for the pets info
-            names = container.findAll("div", {"class": "profileboxname"})
-            cities = container.findAll("div", "profilebox")
-
-            dates = container.findAll("div", "profileboxdate")
-
-            for index in range(0, len(names)):
-                name = names[index].text
-                city = cities[index].contents[1].contents[1].contents[0]
-                commaIndex = str(city).find(",")  # finds the only comma indicating the state
-                inIndex = str(city).index("in")  # finds the word 'in' indicating the start of the state
-                date = dates[index].text
-                iDIndex = str(cities[index].contents[1]).index("id=")
-                ID = str(cities[index].contents[1])[iDIndex + 3:iDIndex + 9]
-                imgURL = "https://www.fidofinder.com/image.php?id=" + str(ID) + "&rand=4367"
-
-                #print("NAME:", str(name)[1:len(str(name)) - 1])
-                #print("CITY:", str(city)[inIndex + 2:commaIndex] + ',' + str(city)[commaIndex + 2:commaIndex + 4])
-                #print("DATE LOST:", str(date)[1:8])
-                #print ("Breed:", str(city)[14:inIndex - 1])
-                #print("Status:", " Lost")
-                #print("ImgUrl:", imgURL)
-                #print("ID:", ID)
-                #print ("")
-
-                dict = {
-                    'name': str(name)[1:len(str(name)) - 1],
-                    'city': str(city)[inIndex + 2:commaIndex] + ',' + str(city)[commaIndex + 2:commaIndex + 4],
-                    'date': str(date)[1:8],
-                    'breed': str(city)[14:inIndex - 1],
-                    'status': 'Lost',
-                    'image': imgURL,
-                    'petid': ID,
-                }
-
-                json.append(dict)
+    async def run(self, zipcode):
+        url = 'https://www.fidofinder.com/lost-dogs/?postal=' + str(zipcode)
+        soup = BeautifulSoup(requests.get(url).text, 'lxml')
+        urls = []
+        tasks = []
         
-        return json
+        for profile in soup.find_all('div', {'class': 'profilebox'}):
+            petid = profile.a['id'].replace('profile_', '')
+            urls.append('https://www.fidofinder.com/dog.php?id=' + petid)
+
+        async with aiohttp.ClientSession() as session:
+            for url in urls:
+                task = asyncio.ensure_future(self.fetch(session, url))
+                tasks.append(task)
+
+            responses = await asyncio.gather(*tasks)
+            
+            return responses
+
+    def scrap(self, zipcode):
+        loop = asyncio.get_event_loop()
+        future = asyncio.ensure_future(self.run(zipcode))
+        return loop.run_until_complete(asyncio.gather(future))
 
 #if __name__ == "__main__":
-    #json = FidoFinderScrap().fidofind(33990)
-    #print(json)
+    #FidoFinderScrap().scrap(33990)

@@ -15,7 +15,6 @@ class Pet(models.Model):
 class FidoFinder(models.Model):
     age = models.TextField()
     breed = models.TextField()
-    city = models.TextField()
     color = models.TextField()
     date = models.TextField()
     gender = models.TextField()
@@ -30,7 +29,6 @@ class FidoFinder(models.Model):
 class HelpingLostPets(models.Model):
     age = models.TextField()
     breed = models.TextField()
-    city = models.TextField()
     color = models.TextField()
     date = models.TextField()
     gender = models.TextField()
@@ -45,7 +43,6 @@ class HelpingLostPets(models.Model):
 class LostMyDoggie(models.Model):
     age = models.TextField()
     breed = models.TextField()
-    city = models.TextField()
     color = models.TextField()
     date = models.TextField()
     gender = models.TextField()
@@ -60,7 +57,6 @@ class LostMyDoggie(models.Model):
 class PawBoost(models.Model):
     age = models.TextField()
     breed = models.TextField()
-    city = models.TextField()
     color = models.TextField()
     date = models.TextField()
     gender = models.TextField()
@@ -75,7 +71,6 @@ class PawBoost(models.Model):
 class PetKey(models.Model):
     age = models.TextField()
     breed = models.TextField()
-    city = models.TextField()
     color = models.TextField()
     date = models.TextField()
     gender = models.TextField()
@@ -90,7 +85,6 @@ class PetKey(models.Model):
 class TabbyTracker(models.Model):
     age = models.TextField()
     breed = models.TextField()
-    city = models.TextField()
     color = models.TextField()
     date = models.TextField()
     gender = models.TextField()
