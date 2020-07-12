@@ -100,9 +100,10 @@ class PetKeyScrap:
             return responses
 
     def scrap(self, zipcode):
-        loop = asyncio.get_event_loop()
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
         future = asyncio.ensure_future(self.run(zipcode))
         return loop.run_until_complete(asyncio.gather(future))
 
-if __name__ == "__main__":
-    PetKeyScrap().scrap('33990')
+#if __name__ == "__main__":
+    #PetKeyScrap().scrap('33990')

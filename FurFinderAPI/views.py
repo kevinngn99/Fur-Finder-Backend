@@ -102,12 +102,10 @@ class PetKeySet(viewsets.ModelViewSet):
     def list(self, request, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True)
-        new_serializer = list(serializer.data)
+        new_serializer = None
 
         if 'zip' in kwargs:
-            json = PetKeyScrap().scrap(kwargs['zip'])
-            for scrapped in json:
-                new_serializer.append(scrapped)
+            new_serializer = PetKeyScrap().scrap(kwargs['zip'])[0]
         
         return Response(new_serializer)
 
