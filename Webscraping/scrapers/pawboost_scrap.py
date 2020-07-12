@@ -17,41 +17,63 @@ class PawBoostScrap:
         json = []
 
         for index in range(1,len(containers[0].contents)-1,2):
-            name = containers[0].contents[index].div.div.h2.text
-            breed = containers[0].contents[index].select("div > div > div > h2 > small")
-            breed=str(breed)[61:69]+""+str(breed)[93:102]
-            name=str(name)[25:35]
-
             city = containers[0].contents[index].div.div.h3.text
             date=containers[0].contents[index].div.p.text
-            id=containers[0].contents[index].select(" div > div > div > p:nth-child(4) > small")
-            idindex=str(id).find("PET ID:")
-
-            date=date[30:46]
+            
             imgURL=containers[0].contents[index].select(" div > div > a > div ")
             imageindex = str(imgURL).index("src=")
             jpgindex=str(imgURL).index("/>")
-            #print ("Name: ",name)
-            #print("Breed: ",breed)
-            #print ("City: ",city)
-            #print ("Date Lost : ",date)
-            #print ("ID : ",str(id)[idindex+8:idindex+15])
-            #print ("ImgURL: ",str(imgURL)[imageindex+5:jpgindex])
-            #print ("\n")
+
+            age = 'N/A'
+            breed = 'N/A'
+            color = 'N/A'
+            date = 'N/A'
+            image = str(imgURL)[imageindex+5:jpgindex][:-1]
+            location = city[:-6]
+            name = containers[0].contents[index].div.div.h2.text
+            name = name.strip()
+            pos = name.find('\n')
+            gender = name[pos + 1:]
+            gender = gender.replace(' ', '')[:-3]
+            name = name[:pos].replace(' ', '')
+            size = 'N/A'
+            detail = containers[0].contents[index].find('span')
+            status = detail.text[0] + detail.text.lower()[1:]
+            petid = detail.parent.text[13:]
+            petid = petid.strip()
+            zip = city[-5:]
+
+            #print('----------------')
+            #print(age)
+            #print(breed)
+            #print(color)
+            #print(date)
+            #print(gender)
+            #print(image)
+            #print(location)
+            #print(name)
+            #print(petid)
+            #print(size)
+            #print(status)
+            #print(zip)
 
             dict = {
-                'name': name,
+                'age': age,
                 'breed': breed,
-                'location': city,
+                'color': color,
                 'date': date,
-                'petid': str(id)[idindex+8:idindex+15],
-                'image': str(imgURL)[imageindex+5:jpgindex]
+                'gender': gender,
+                'image': image,
+                'location': location,
+                'name': name,
+                'petid': petid,
+                'status': status,
+                'zip': zip
             }
 
             json.append(dict)
 
         return json
 
-#if __name__ == "__main__":
-    #json = PawBoostScrap().scrap('33990')
-    #print(json)
+if __name__ == "__main__":
+    PawBoostScrap().scrap('33990')

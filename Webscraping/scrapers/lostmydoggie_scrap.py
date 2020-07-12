@@ -61,19 +61,19 @@ class LostMyDoggieScrap:
                 age = 'N/A'
                 size = 'N/A'
 
-                print('----------------')
-                print(age)
-                print(breed)
-                print(color)
-                print(date)
-                print(gender)
-                print(image)
-                print(location)
-                print(name)
-                print(petid)
-                print(size)
-                print(status)
-                print(zip)
+                #print('----------------')
+                #print(age)
+                #print(breed)
+                #print(color)
+                #print(date)
+                #print(gender)
+                #print(image)
+                #print(location)
+                #print(name)
+                #print(petid)
+                #print(size)
+                #print(status)
+                #print(zip)
 
                 dict = {
                     'age': age,
@@ -96,5 +96,5 @@ class LostMyDoggieScrap:
 
         return json
 
-if __name__ == "__main__":
-    LostMyDoggieScrap().scrap('33990')
+#if __name__ == "__main__":
+    #LostMyDoggieScrap().scrap('33990')
