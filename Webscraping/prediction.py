@@ -27,7 +27,6 @@ def load_image(filename):
 
 def getPerdiction(model):
     perdiction = model.predict(load_image("img.png"))
-    print(f"{perdiction[0][0]+perdiction[0][1]}% chance it ", end='')
     if (perdiction[0][0] + perdiction[0][1])>0.60:
         return "is a pet"
     else: return "is not a pet"
