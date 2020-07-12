@@ -8,7 +8,7 @@ class PetSerializer(serializers.HyperlinkedModelSerializer):
 
 class ReportedPetsSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Pet
+        model = ReportedPets
         fields = ('name', 'gender', 'size', 'date', 'age', 'state', 'zip', 'location','breed','image')
 
 class FidoFinderSerializer(serializers.HyperlinkedModelSerializer):
