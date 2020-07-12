@@ -47,6 +47,7 @@ class LostMyDoggieScrap:
                 date = detail.li.find_next_sibling('li').find_next_sibling('li').text
                 date = date[date.find(' ') + 1:]
 
+                '''
                 try:
                     date = datetime.strptime(date, '%m/%d/%Y').strftime('%B %d, %Y')
                 except:
@@ -57,6 +58,7 @@ class LostMyDoggieScrap:
                             date = datetime.strptime(date, '%Y-%m-%d').strftime('%B %d, %Y')
                         except:
                             date = datetime.strptime(date, '%m-%d-%Y').strftime('%B %d, %Y')
+                '''
 
                 age = 'N/A'
                 size = 'N/A'
