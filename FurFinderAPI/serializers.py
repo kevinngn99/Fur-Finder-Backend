@@ -9,32 +9,32 @@ class PetSerializer(serializers.HyperlinkedModelSerializer):
 class FidoFinderSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = FidoFinder
-        fields = ('name', 'city', 'date', 'breed', 'status', 'image', 'petid')
+        fields = ('age', 'breed', 'city', 'color', 'date', 'gender', 'image', 'location', 'name', 'petid', 'size', 'status', 'zip')
 
 class HelpingLostPetsSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = HelpingLostPets
-        fields = ('status', 'date', 'location', 'image', 'name', 'breed', 'gender', 'age', 'size', 'color')
+        fields = ('age', 'breed', 'city', 'color', 'date', 'gender', 'image', 'location', 'name', 'petid', 'size', 'status', 'zip')
 
 class LostMyDoggieSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = LostMyDoggie
-        fields = ('image', 'name', 'status', 'gender', 'location', 'zip', 'breed', 'color', 'date')
+        fields = ('age', 'breed', 'city', 'color', 'date', 'gender', 'image', 'location', 'name', 'petid', 'size', 'status', 'zip')
 
 class PawBoostSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = PawBoost
-        fields = ('name', 'breed', 'location', 'date', 'petid', 'image')
+        fields = ('age', 'breed', 'city', 'color', 'date', 'gender', 'image', 'location', 'name', 'petid', 'size', 'status', 'zip')
 
 class PetKeySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = PetKey
-        fields = ('name', 'breed', 'age', 'gender', 'color', 'image')
+        fields = ('age', 'breed', 'city', 'color', 'date', 'gender', 'image', 'location', 'name', 'petid', 'size', 'status', 'zip')
 
 class TabbyTrackerSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = TabbyTracker
-        fields = ('name', 'location', 'date', 'breed', 'status', 'image', 'petid')
+        fields = ('age', 'breed', 'city', 'color', 'date', 'gender', 'image', 'location', 'name', 'petid', 'size', 'status', 'zip')
 
 class imageReportSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
