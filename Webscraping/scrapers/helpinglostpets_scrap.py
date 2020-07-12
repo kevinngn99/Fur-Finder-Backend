@@ -18,7 +18,7 @@ class HelpingLostPetsScrap:
         formdata['__EVENTTARGET'] = 'gvOrgPets'
         formdata['__EVENTARGUMENT'] = 'Page$' + str(page)
         formdata['__LASTFOCUS'] = ''
-        formdata['ddlStatus'] = '0'
+        formdata['ddlStatus'] = '1'
         formdata['ddlSpecies'] = ''
         formdata['ddlGender'] = ''
         formdata['ddlAges'] = '0'
@@ -113,7 +113,7 @@ class HelpingLostPetsScrap:
 
                 while status != None:
                     date = status.find_next_sibling('span')
-                    location = date.find_next_sibling('span')
+                    location = date.find_next_sibling('span').text[3:]
 
                     block = status.parent.parent.find_next_sibling('tr')
                     image = block.td.div.a['href']
@@ -125,30 +125,49 @@ class HelpingLostPetsScrap:
                     age = gender.find_next_sibling('b')
                     size = age.find_next_sibling('b')
                     color = size.find_next_sibling('b')
+                    petid = block.b.find_next_sibling('b')
+                    zip = location[-5:]
 
-                    #print('----------------')
-                    #print('Status: ', status.text)
-                    #print('Date: ', re.sub('[.]', ' ', date.text[4:]))
-                    #print('Location: ', location.text[3:])
-                    #print('Image: ', image)
-                    #print('Name: ', name)
-                    #print('Breed: ', re.sub('[^A-Za-z]+', ' ', breed.text))
-                    #print('Gender: ', gender.text)
-                    #print('Age: ', age.text)
-                    #print('Size: ', size.text)
-                    #print('Color: ', color.text)
+                    age = age.text
+                    breed = re.sub('[^A-Za-z]+', ' ', breed.text)[4:]
+                    color = color.text
+                    date = re.sub('[.]', ' ', date.text[4:])
+                    gender = gender.text
+                    image = image
+                    location = location[:-6]
+                    name = name
+                    petid = petid.text
+                    size = size.text
+                    status = status.text
+                    zip = zip
+
+                    print('----------------')
+                    print(age)
+                    print(breed)
+                    print(color)
+                    print(date)
+                    print(gender)
+                    print(image)
+                    print(location)
+                    print(name)
+                    print(petid)
+                    print(size)
+                    print(status)
+                    print(zip)
 
                     dictionary = {
-                        'status': status.text,
-                        'date': re.sub('[.]', ' ', date.text[4:]),
-                        'location': location.text[3:],
+                        'age': age,
+                        'breed': breed,
+                        'color': color,
+                        'date': date,
+                        'gender': gender,
                         'image': image,
+                        'location': location,
                         'name': name,
-                        'breed': re.sub('[^A-Za-z]+', ' ', breed.text),
-                        'gender': gender.text,
-                        'age': age.text,
-                        'size': size.text,
-                        'color': color.text
+                        'petid': petid,
+                        'size': size,
+                        'status': status,
+                        'zip': zip
                     }
 
                     json.append(dictionary)
@@ -161,6 +180,5 @@ class HelpingLostPetsScrap:
 
         return json
 
-#if __name__ == "__main__":
-    #json = HelpingLostPetsScrap().scrap('33990')
-    #print(json)
+if __name__ == "__main__":
+    HelpingLostPetsScrap().scrap('33990')
