@@ -1,5 +1,7 @@
-from bs4 import BeautifulSoup
 import requests
+
+from bs4 import BeautifulSoup
+from datetime import datetime
 
 class LostMyDoggieScrap:
     def get_url(self, n, p, z):
@@ -17,15 +19,11 @@ class LostMyDoggieScrap:
     def scrap(self, zipcode):
         json = []
 
-        #zipcode = input('Enter zip code: ')
         url = self.get_url(1, 1, zipcode)
         soup = BeautifulSoup(requests.get(url).text, 'lxml')
 
         header = soup.find('div', {'class': 'col-lg-12 bg-darkcolor'}).font.text
         count = int(str(header).split(' Lost')[0].split('Showing ')[1])
-        #print('Number of lost pets: ', count)
-        #print()
-
         num = 1
         page = 1
 
@@ -39,35 +37,56 @@ class LostMyDoggieScrap:
                 detail = column.find('ul', {'class: ', 'custom no-margin'})
 
                 name = info.h4.text
+                petid = info.p.text[4:]
                 status = info.h6.span.font.text
-                gender = info.h6.text.split(status)[1].encode('ascii',errors='ignore').decode()[1:]
+                gender = info.h6.text.split(status)[1].encode('ascii',errors='ignore').decode()[1:][:-4]
                 location = info.h6.find_next_sibling('h6').find(text=True)
                 zip = info.h6.find_next_sibling('h6').text.split(location)[1]
                 breed = detail.li.text.split('\n')[0]
                 color = detail.li.find_next_sibling('li').text
                 date = detail.li.find_next_sibling('li').find_next_sibling('li').text
+                date = date[date.find(' ') + 1:]
 
-                #print('----------------')
-                #print('Image: ', image)
-                #print('Name: ', name)
-                #print('Status:', status)
-                #print('Gender: ', gender)
-                #print('Location: ', location)
-                #print('Zip: ', zip)
-                #print('Breed: ', breed)
-                #print('Color: ', color)
-                #print(date)
+                try:
+                    date = datetime.strptime(date, '%m/%d/%Y').strftime('%B %d, %Y')
+                except:
+                    try:
+                        date = datetime.strptime(date, '%m/%d/%y').strftime('%B %d, %Y')
+                    except:
+                        try:
+                            date = datetime.strptime(date, '%Y-%m-%d').strftime('%B %d, %Y')
+                        except:
+                            date = datetime.strptime(date, '%m-%d-%Y').strftime('%B %d, %Y')
+
+                age = 'N/A'
+                size = 'N/A'
+
+                print('----------------')
+                print(age)
+                print(breed)
+                print(color)
+                print(date)
+                print(gender)
+                print(image)
+                print(location)
+                print(name)
+                print(petid)
+                print(size)
+                print(status)
+                print(zip)
 
                 dict = {
-                    'image': image,
-                    'name': name,
-                    'status': status,
-                    'gender': gender,
-                    'location': location,
-                    'zip': zip,
+                    'age': age,
                     'breed': breed,
                     'color': color,
-                    'date': date
+                    'date': date,
+                    'gender': gender,
+                    'image': image,
+                    'location': location,
+                    'name': name,
+                    'petid': petid,
+                    'status': status,
+                    'zip': zip
                 }
 
                 json.append(dict)
@@ -77,6 +96,5 @@ class LostMyDoggieScrap:
 
         return json
 
-#if __name__ == "__main__":
-    #json = LostMyDoggieScrap().scrap('33990')
-    #print(json)
+if __name__ == "__main__":
+    LostMyDoggieScrap().scrap('33990')
