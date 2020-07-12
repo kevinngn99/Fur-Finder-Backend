@@ -72,6 +72,20 @@ class FidoFinderScrap:
                     color = color[:pos] + color[pos + 1:]
                 else:
                     color = color.strip()
+
+            #print('----------------')
+            #print(age)
+            #print(breed)
+            #print(color)
+            #print(date)
+            #print(gender)
+            #print(image)
+            #print(location)
+            #print(name)
+            #print(petid)
+            #print(size)
+            #print(status)
+            #print(zip)
             
             dict = {
                 'age': age,

@@ -1,62 +1,133 @@
-from bs4 import BeautifulSoup
 import requests
+import aiohttp
+import asyncio
+
+from bs4 import BeautifulSoup
+from datetime import datetime
 
 class TabbyTrackerScrap:
-    def scrap(self, zipcode_):
-        # ask for zipCode
-        ZipCode = zipcode_
+    async def fetch(self, session, url):
+        async with session.get(url) as response:
+            assert response.status == 200
+            soup = BeautifulSoup(await response.text(), 'lxml')
 
-        # sets url to desired webpage
-        url = "https://www.tabbytracker.com/lost-cats/?postal=" + str(ZipCode)
+            description = soup.find('span', {'class': 'description'}).findAll(text=True)
 
-        # uses bs4 to parse the HTML
-        page_soup = BeautifulSoup(requests.get(url).text,features="lxml")
+            petid = soup.find('h4', {'id': 'idnumber'}).text[4:]
+            age = 'N/A'
+            breed = None
+            color = None
+            format = soup.find('div', {'class': 'row mb-2'}).div.h3.text[:-1][8:]
+            date = datetime.strptime(format, '%m/%d/%Y').strftime('%B %d, %Y')
+            gender = None
+            image = 'https://www.tabbytracker.com/image.php?id=' + petid
+            location = None
+            name = soup.find('h2', {'class': 'name'}).text
+            size = 'N/A'
+            status = 'Lost'
+            zip = None
 
-        containers = page_soup.findAll("div", {"class": "row section"})
+            if len(description) == 4:
+                gender = description[0][:-1]
+                color = description[1][:-4]
+                breed = 'N/A'
+                location = description[2][:-3]
+                zip = location[-5:]
+                location = location[:-6]
 
-        json = []
+                if '&' in color:
+                    color = color[:-1]
+                elif '/' in color:
+                    pos = color.find('(') - 1
+                    color = color[:pos] + color[pos + 1:]
+                else:
+                    color = color.strip()
+            elif len(description) == 5:
+                gender = description[0][:-1]
+                color = description[1]
+                breed = description[2][:-1]
+                location = description[3][:-3]
+                zip = location[-5:]
+                location = location[:-6]
+                
+                if '&' in color:
+                    color = color[:-1]
+                elif '/' in color:
+                    pos = color.find('(') - 1
+                    color = color[:pos] + color[pos + 1:]
+                else:
+                    color = color.strip()
+            elif len(description) == 6:
+                gender = description[0][:-1]
+                color = description[1]
+                breed = description[2] + description[3][:-1]
+                location = description[4][:-3]
+                zip = location[-5:]
+                location = location[:-6]
+                
+                if '&' in color:
+                    color = color[:-1]
+                elif '/' in color:
+                    pos = color.find('(') - 1
+                    color = color[:pos] + color[pos + 1:]
+                else:
+                    color = color.strip()
 
-        for container in containers:
+            #print('----------------')
+            #print(age)
+            #print(breed)
+            #print(color)
+            #print(date)
+            #print(gender)
+            #print(image)
+            #print(location)
+            #print(name)
+            #print(petid)
+            #print(size)
+            #print(status)
+            #print(zip)
+            
+            dict = {
+                'age': age,
+                'breed': breed,
+                'color': color,
+                'date': date,
+                'gender': gender,
+                'image': image,
+                'location': location,
+                'name': name,
+                'petid': petid,
+                'size': size,
+                'status': status,
+                'zip': zip
+            }
 
-            # searches the html for the pets info
-            names = container.findAll("div", {"class": "profileboxname"})
-            cities = container.findAll("div", "profilebox")
+            return dict
 
-            dates = container.findAll("div", "profileboxdate")
+    async def run(self, zipcode):
+        url = 'https://www.tabbytracker.com/lost-cats/?postal=' + str(zipcode)
+        soup = BeautifulSoup(requests.get(url).text, 'lxml')
+        urls = []
+        tasks = []
+        
+        for profile in soup.find_all('div', {'class': 'profilebox'}):
+            petid = profile.a['id'].replace('profile_', '')
+            urls.append('https://www.tabbytracker.com/cat.php?id=' + petid)
 
-            for index in range(0, len(names)):
-                name = names[index].text
-                city = cities[index].contents[1].contents[1].contents[0]
-                commaIndex = str(city).find(",")  # finds the only comma indicating the state
-                inIndex = str(city).index("in")  # finds the word 'in' indicating the start of the state
-                date = dates[index].text
-                iDIndex = str(cities[index].contents[1]).index("id=")
-                ID = str(cities[index].contents[1])[iDIndex + 3:iDIndex + 9]
-                imgURL = "https://www.tabbytracker.com/image.php?id=" + str(ID) + "&rand=4367"
+        async with aiohttp.ClientSession() as session:
+            for url in urls:
+                task = asyncio.ensure_future(self.fetch(session, url))
+                tasks.append(task)
 
-                #print("NAME:", str(name)[1:len(str(name)) - 1])
-                #print("CITY:", str(city)[inIndex + 2:commaIndex] + ',' + str(city)[commaIndex + 2:commaIndex + 4])
-                #print("DATE LOST:", str(date)[1:8])
-                #print ("Breed:", str(city)[14:inIndex - 1])
-                #print("Status:", " Lost")
-                #print("ImgUrl:", imgURL)
-                #print("ID:", ID)
-                #print ("")
+            responses = await asyncio.gather(*tasks)
+            
+            return responses
 
-                dict = {
-                    'name': str(name)[1:len(str(name)) - 1],
-                    'location': str(city)[inIndex + 2:commaIndex] + ',' + str(city)[commaIndex + 2:commaIndex + 4],
-                    'date': str(date)[1:8],
-                    'breed': str(city)[14:inIndex - 1],
-                    'status': 'Lost',
-                    'image': imgURL,
-                    'petid': ID
-                }
-
-                json.append(dict)
-
-        return json
+    def scrap(self, zipcode):
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        future = asyncio.ensure_future(self.run(zipcode))
+        return loop.run_until_complete(asyncio.gather(future))
 
 #if __name__ == "__main__":
-    #json = TabbyTrackerScrap().scrap('33990')
-    #print(json)
+    #TabbyTrackerScrap().scrap(33990)

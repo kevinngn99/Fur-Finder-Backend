@@ -141,19 +141,19 @@ class HelpingLostPetsScrap:
                     status = status.text
                     zip = zip
 
-                    print('----------------')
-                    print(age)
-                    print(breed)
-                    print(color)
-                    print(date)
-                    print(gender)
-                    print(image)
-                    print(location)
-                    print(name)
-                    print(petid)
-                    print(size)
-                    print(status)
-                    print(zip)
+                    #print('----------------')
+                    #print(age)
+                    #print(breed)
+                    #print(color)
+                    #print(date)
+                    #print(gender)
+                    #print(image)
+                    #print(location)
+                    #print(name)
+                    #print(petid)
+                    #print(size)
+                    #print(status)
+                    #print(zip)
 
                     dictionary = {
                         'age': age,
@@ -180,5 +180,5 @@ class HelpingLostPetsScrap:
 
         return json
 
-if __name__ == "__main__":
-    HelpingLostPetsScrap().scrap('33990')
+#if __name__ == "__main__":
+    #HelpingLostPetsScrap().scrap('33990')
