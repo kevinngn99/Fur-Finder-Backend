@@ -12,6 +12,18 @@ class Pet(models.Model):
     breed = models.TextField()
     image=models.TextField()
 
+class ReportPets(models.Model):
+    name = models.TextField()
+    gender = models.TextField()
+    size = models.TextField()
+    date = models.TextField()
+    age = models.TextField()
+    state = models.TextField()
+    zip = models.TextField()
+    location = models.TextField()
+    breed = models.TextField()
+    image=models.TextField()    
+
 class FidoFinder(models.Model):
     name = models.TextField()
     city = models.TextField()
@@ -68,6 +80,3 @@ class TabbyTracker(models.Model):
     status = models.TextField()
     image = models.TextField()
     petid = models.TextField()
-
-class imageReport(models.Model):
-    image = models.TextField()
