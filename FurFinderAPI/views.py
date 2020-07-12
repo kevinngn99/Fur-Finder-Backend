@@ -121,7 +121,7 @@ class TabbyTrackerSet(viewsets.ModelViewSet):
         new_serializer = None
 
         if 'zip' in kwargs:
-            new_serializer = TabbyTracker().scrap(kwargs['zip'])[0]
+            new_serializer = TabbyTrackerScrap().scrap(kwargs['zip'])[0]
         
         return Response(new_serializer)
 
