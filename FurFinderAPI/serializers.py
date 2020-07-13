@@ -4,12 +4,12 @@ from .models import Pet, FidoFinder, HelpingLostPets, LostMyDoggie, PawBoost, Pe
 class PetSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Pet
-        fields = ('name', 'gender', 'size', 'date', 'age', 'state', 'zip', 'location','breed','image')
+        fields = ('name','id', 'gender', 'size', 'date', 'age', 'state', 'zip', 'location','breed','image')
 
 class ReportedPetsSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ReportedPets
-        fields = ('name', 'gender', 'size', 'date', 'age', 'state', 'zip', 'location','breed','image')
+        fields = ('name','id', 'gender', 'size', 'date', 'age', 'state', 'zip', 'location','breed','image')
 
 class FidoFinderSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

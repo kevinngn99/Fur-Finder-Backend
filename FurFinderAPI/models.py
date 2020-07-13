@@ -2,6 +2,7 @@ from django.db import models
 
 class Pet(models.Model):
     name = models.TextField()
+    id = models.PositiveIntegerField(primary_key=True)
     gender = models.TextField()
     size = models.TextField()
     date = models.TextField()
@@ -11,9 +12,12 @@ class Pet(models.Model):
     location = models.TextField()
     breed = models.TextField()
     image = models.TextField()
+    islost = models.BooleanField(default=True)
+
 
 class ReportedPets(models.Model):
     name = models.TextField()
+    id = models.PositiveIntegerField(primary_key=True)
     gender = models.TextField()
     size = models.TextField()
     date = models.TextField()
@@ -23,6 +27,7 @@ class ReportedPets(models.Model):
     location = models.TextField()
     breed = models.TextField()
     image = models.TextField()
+    islost = models.BooleanField(default=True)
 
 class FidoFinder(models.Model):
     age = models.TextField(default='Age')
