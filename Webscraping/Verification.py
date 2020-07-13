@@ -8,9 +8,11 @@ from prediction import reportPrediction
 #check api/pets if pet has been reported as found
 #remove pets that have been reported as found from /api/pets
 #update the pet model to have a found boolean
+#we probably need to give each pet a unique identifier
 
 #maybe check for valid zipcodes?
 
+#checks if a pet with a certain name exisits in database
 def isInBackend(name):
 
     data = requests.get(url='http://192.168.2.14:8000/api/pets//')
