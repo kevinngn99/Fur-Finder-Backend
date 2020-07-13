@@ -3,6 +3,7 @@ import json
 import base64
 from prediction import reportPrediction
 
+
 #to do
 #check for profanity in names, breed, location,
 #check api/pets if pet has been reported as found
@@ -13,17 +14,20 @@ from prediction import reportPrediction
 #maybe check for valid zipcodes?
 
 #checks if a pet with a certain name exisits in database
-def isInBackend(name):
-
+def isInBackend(id):
     data = requests.get(url='http://192.168.2.14:8000/api/pets//')
     data = data.json()
     for index in range(len(data)):
         inBackend = False
-        if data[index]["name"] == name:
+        if data[index]["id"] == id:
             inBackend = True
             print("Pet name is already in database.")
     return inBackend
 
+#given a petID will return if pet is still reported as lost
+def isLost(id):
+    obj = Pet.objects.get(id)
+    return(obj.islost)
 
 
 def getImage(image_data):
@@ -43,9 +47,9 @@ def main():
         getImage( data[i]['image'] )
         predict = reportPrediction()
         #checks to see if the image is a cat/dog and checks for Duplicates before posting
-        if predict == 'is a pet' and isInBackend(data[i]["name"])==False:
+        if predict == 'is a pet' and isInBackend(data[i]["id"])==False:
             requests.post(url='http://192.168.2.14:8000/api/pets//', data=data[i])
-        else: print("not a pet!")
+        else: print(data[i]["name"],"not a pet!")
 
 if __name__ == '__main__':
     main()
