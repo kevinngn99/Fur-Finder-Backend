@@ -26,8 +26,14 @@ def isInBackend(id):
 
 #given a petID will return if pet is still reported as lost
 def isLost(id):
-    obj = Pet.objects.get(id)
-    return(obj.islost)
+    data = requests.get(url='http://192.168.2.14:8000/api/pets//')
+    data = data.json()
+    for index in range(len(data)):
+
+        if data[index]["id"] == id:
+            return data[index]["islost"]
+
+
 
 
 def getImage(image_data):
@@ -50,6 +56,8 @@ def main():
         if predict == 'is a pet' and isInBackend(data[i]["id"])==False:
             requests.post(url='http://192.168.2.14:8000/api/pets//', data=data[i])
         else: print(data[i]["name"],"not a pet!")
+
+        print("is lost?",isLost(1))
 
 if __name__ == '__main__':
     main()
