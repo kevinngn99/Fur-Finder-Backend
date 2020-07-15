@@ -25,7 +25,7 @@ class PetViewSet(viewsets.ModelViewSet):
 
     def post(self, request, formant=None):
         queryset = self.filter_queryset(self.get_queryset())
-        serializer = self.get_serializer(queryset, many=True, data=request.data)
+        serializer = self.get_serializer(queryset, many=True, data=request.data, files=request.files)
 
         if serializer.is_valid():
             serializer.save()
