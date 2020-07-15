@@ -3,8 +3,22 @@ from rest_framework import routers
 from . import views
 
 router = routers.DefaultRouter()
-router.register(r'api/pets', views.PetViewSet)
-router.register(r'api/report', views.imageReportViewSet)
+router.register(r'api/pets/', views.PetViewSet)
+router.register(r'api/reportedpets/', views.ReportedPetsViewSet)
+router.register(r'api/fidofinder/', views.FidoFinderSet)
+router.register(r'api/helpinglostpets/', views.HelpingLostPetsSet)
+router.register(r'api/lostmydoggie/', views.LostMyDoggieSet)
+router.register(r'api/pawboost/', views.PawBoostSet)
+router.register(r'api/petkey/', views.PetKeySet)
+router.register(r'api/tabbytracker/', views.TabbyTrackerSet)
+
+router.register(r'^api/pets/(?P<zip>[0-9]+)', views.PetViewSet)
+router.register(r'^api/fidofinder/(?P<zip>[0-9]+)', views.FidoFinderSet)
+router.register(r'^api/helpinglostpets/(?P<zip>[0-9]+)', views.HelpingLostPetsSet)
+router.register(r'^api/lostmydoggie/(?P<zip>[0-9]+)', views.LostMyDoggieSet)
+router.register(r'^api/pawboost/(?P<zip>[0-9]+)', views.PawBoostSet)
+router.register(r'^api/petkey/(?P<zip>[0-9]+)', views.PetKeySet)
+router.register(r'^api/tabbytracker/(?P<zip>[0-9]+)', views.TabbyTrackerSet)
 
 urlpatterns = [
     path('', include(router.urls)),
