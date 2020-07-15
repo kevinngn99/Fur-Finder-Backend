@@ -18,7 +18,7 @@ def isInBackend(id):
     conn = sqlite3.connect('../db.sqlite3')
     c = conn.cursor()
     inBackend = c.execute("SELECT EXISTS(SELECT 1 FROM FurFinderAPI_pet WHERE id is 1);").fetchall()
-
+    print("inBackend: ",True if inBackend[0][0] == 1 else False)
     return True if inBackend[0][0] == 1 else False
     conn.close()
 
