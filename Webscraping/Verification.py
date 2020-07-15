@@ -1,4 +1,3 @@
-
 import requests
 import json
 import base64
@@ -9,44 +8,31 @@ from profanity import profanity
 import sqlite3
 
 
-
-
-
 # to do
 # remove pets that have been reported as found from /api/pets
 # maybe check for valid zipcodes?
 
 # checks if a pet with a certain name exisits in database
 def isInBackend(id):
-
     conn = sqlite3.connect('../db.sqlite3')
     c = conn.cursor()
-    inBackend= c.execute("SELECT EXISTS(SELECT 1 FROM FurFinderAPI_pet WHERE id is "+str(id)+");").fetchall()
-    inBackend = True if inBackend[0][0] == 1 else False
-    print("inBackend :",inBackend)
-    return inBackend
+    inBackend = c.execute("SELECT EXISTS(SELECT 1 FROM FurFinderAPI_pet WHERE id is " + str(id) + ");").fetchall()
+
+    return True if inBackend[0][0] == 1 else False
     conn.close()
 
 
 # given a petID will return if pet is still reported as lost
 def isLost(id):
-
-
-    #check if pet with Id exisits
+    # check if pet with Id exisits
     if isInBackend(id) == True:
         conn = sqlite3.connect('../db.sqlite3')
         c = conn.cursor()
-        lost = c.execute("SELECT islost FROM FurFinderAPI_pet WHERE id is "+str(id)).fetchall()
-        lost = True if lost[0][0] == 1 else False
-        print("lost? :", lost)
-        return lost
+        lost = c.execute("SELECT islost FROM FurFinderAPI_pet WHERE id is " + str(id)).fetchall()
+        return True if lost[0][0] == 1 else False
         conn.close()
-
     else:
         return "Error pet not in database"
-
-
-
 
 
 # check for profanity in names, breed, location,
@@ -68,18 +54,22 @@ def getImage(image_data):
         file.write(image_data)
 
 
-# given a pet id will remove said pet from api/pets and possibly in the future put it in another database to be
+# will remove all pets marked as found from api/pets and possibly in the future put it in another database to be
 # displayed in the reunited pet section of our app.
-def removeFoundPets(id):
-    if isLost(id) == False:
-        print("TODO: figure out to remove pet instance from api/pets if marked as found ")
+def removeFoundPets():
+
+    conn = sqlite3.connect('../db.sqlite3')
+    c = conn.cursor()
+    c.execute("DELETE FROM FurFinderAPI_pet WHERE islost IS false;")
+    conn.commit()
+    conn.close()
 
 
 def main():
     # gets the data from the unverified pet database
     data = requests.get(url='http://192.168.2.8:8000/api/reportedpets//')
     data = data.json()
-
+    removeFoundPets()
     for i in range(len(data)):
         getImage(data[i]['image'])
         predict = reportPrediction()
