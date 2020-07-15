@@ -8,8 +8,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import PetSerializer, FidoFinderSerializer, HelpingLostPetsSerializer, LostMyDoggieSerializer, PawBoostSerializer, PetKeySerializer, TabbyTrackerSerializer, imageReportSerializer
-from .models import Pet, FidoFinder, HelpingLostPets, LostMyDoggie, PawBoost, PetKey, TabbyTracker, imageReport
+from .serializers import PetSerializer, FidoFinderSerializer, HelpingLostPetsSerializer, LostMyDoggieSerializer, PawBoostSerializer, PetKeySerializer, TabbyTrackerSerializer, imageReportSerializer, RegistrationSerializer
+from .models import Pet, FidoFinder, HelpingLostPets, LostMyDoggie, PawBoost, PetKey, TabbyTracker, imageReport, Account
 
 from Webscraping.scrapers.fidofinder_scrap import FidoFinderScrap
 from Webscraping.scrapers.helpinglostpets_scrap import HelpingLostPetsScrap
@@ -17,6 +17,25 @@ from Webscraping.scrapers.lostmydoggie_scrap import LostMyDoggieScrap
 from Webscraping.scrapers.pawboost_scrap import PawBoostScrap
 from Webscraping.scrapers.petkey_scrap import PetKeyScrap
 from Webscraping.scrapers.tabbytracker_scrap import TabbyTrackerScrap
+
+
+class RegisterViewSet(viewsets.ModelViewSet):
+    queryset = Account.objects.all().order_by('id')
+    serializer_class = RegistrationSerializer
+
+    def post(self, request, format=None):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = RegistrationSerializer(data=request.data)
+
+        data = {}
+        if serializer.is_valid():
+            account = serializer.save()
+            data['response'] = "successfully registered a new user."
+            data['email'] = account.email
+            data['username'] = account.username
+        else:
+            data = serializer.errors
+        return Response(data)
 
 
 class PetViewSet(viewsets.ModelViewSet):
