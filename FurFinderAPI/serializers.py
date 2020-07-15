@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Pet, FidoFinder, HelpingLostPets, LostMyDoggie, PawBoost, PetKey, TabbyTracker, imageReport, Account
+from .models import Pet, FidoFinder, HelpingLostPets, LostMyDoggie, PawBoost, PetKey, TabbyTracker, imageReport
+from django.contrib.auth.models import User
 
 
 class RegistrationSerializer(serializers.HyperlinkedModelSerializer):
@@ -7,11 +8,11 @@ class RegistrationSerializer(serializers.HyperlinkedModelSerializer):
     password2 = serializers.CharField(style={'input_type': 'password'}, write_only=True)
 
     class Meta:
-        model = Account
+        model = User
         fields = ['email', 'username', 'password', 'password2']
 
     def save(self):
-        account = Account(
+        account = User(
                     email=self.validated_data['email'],
                     username=self.validated_data['username'],
         )
@@ -20,7 +21,7 @@ class RegistrationSerializer(serializers.HyperlinkedModelSerializer):
 
         if password != password2:
             raise serializers.ValidationError({'password': 'Passwords must match'})
-        account.password = password
+        account.set_password(password)
         account.save()
         return account
 
