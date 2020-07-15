@@ -1,33 +1,20 @@
 from django.db import models
 
+
 class Pet(models.Model):
-    name = models.TextField()
-    id = models.PositiveIntegerField(primary_key=True)
-    gender = models.TextField()
-    size = models.TextField()
-    date = models.TextField()
-    age = models.TextField()
-    state = models.TextField()
-    zip = models.TextField()
-    location = models.TextField()
-    breed = models.TextField()
-    image = models.TextField()
-    islost = models.BooleanField(default=True)
-
-
-class ReportedPets(models.Model):
-    name = models.TextField()
-    id = models.PositiveIntegerField(primary_key=True)
-    gender = models.TextField()
-    size = models.TextField()
-    date = models.TextField()
-    age = models.TextField()
-    state = models.TextField()
-    zip = models.TextField()
-    location = models.TextField()
-    breed = models.TextField()
-    image = models.TextField()
-    islost = models.BooleanField(default=True)
+    age = models.TextField(default='Age')
+    breed = models.TextField(default='Breed')
+    city = models.TextField(default='City')
+    color = models.TextField(default='Color')
+    date = models.TextField(default='Date')
+    gender = models.TextField(default='Gender')
+    image = models.ImageField(upload_to='images/')
+    name = models.TextField(default='Name')
+    petid = models.TextField(default='PetID')
+    size = models.TextField(default='Size')
+    state = models.TextField(default='State')
+    status = models.TextField(default='Status')
+    zip = models.TextField(default='Zip')
 
 class FidoFinder(models.Model):
     age = models.TextField(default='Age')
@@ -112,3 +99,6 @@ class TabbyTracker(models.Model):
     size = models.TextField(default='Size')
     status = models.TextField(default='Status')
     zip = models.TextField(default='Zip')
+
+class imageReport(models.Model):
+    image = models.TextField()

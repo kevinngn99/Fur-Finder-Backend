@@ -3,6 +3,7 @@ from rest_framework import routers
 from . import views
 
 router = routers.DefaultRouter()
+router.register(r'api/register/', views.RegisterViewSet)
 router.register(r'api/pets/', views.PetViewSet)
 router.register(r'api/reportedpets/', views.ReportedPetsViewSet)
 router.register(r'api/fidofinder/', views.FidoFinderSet)
@@ -12,6 +13,7 @@ router.register(r'api/pawboost/', views.PawBoostSet)
 router.register(r'api/petkey/', views.PetKeySet)
 router.register(r'api/tabbytracker/', views.TabbyTrackerSet)
 
+router.register(r'^api/register/(?P<zip>[0-9]+)', views.RegisterViewSet)
 router.register(r'^api/pets/(?P<zip>[0-9]+)', views.PetViewSet)
 router.register(r'^api/fidofinder/(?P<zip>[0-9]+)', views.FidoFinderSet)
 router.register(r'^api/helpinglostpets/(?P<zip>[0-9]+)', views.HelpingLostPetsSet)
