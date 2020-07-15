@@ -1,5 +1,11 @@
 from django.db import models
 
+class Account(models.Model):
+    email = models.TextField(default='Name')
+    username = models.TextField(default='Username')
+    password = models.TextField(default='Password')
+    password2 = models.TextField(default='Password2')
+
 class Pet(models.Model):
     age = models.TextField(default='Age')
     breed = models.TextField(default='Breed')
