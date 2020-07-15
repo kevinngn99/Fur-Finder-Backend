@@ -28,6 +28,7 @@ def load_image(filename):
 def getPerdiction(model):
     perdiction = model.predict(load_image("img.png"))
     if (perdiction[0][0] + perdiction[0][1])>0.60:
+        print("pet confidence : ",perdiction[0][0] + perdiction[0][1])
         return "is a pet"
     else: return "is not a pet"
 

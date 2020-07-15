@@ -67,11 +67,11 @@ def main():
 
         getImageFromInternet(data[i]['image'])
         predict = reportPrediction()
+        print(predict)
         # checks to see if the image is a cat/dog, checks for Duplicates and profanity before posting
         if predict == 'is a pet' and isInBackend(data[i]["petid"]) == False and profanityCheck(data[i]) == False:
             requests.post(url='http://192.168.2.8:8000/api/pets//', data=data[i])
-        else:
-            print(data[i]["name"], "not a pet!")
+
 
 
 if __name__ == '__main__':
