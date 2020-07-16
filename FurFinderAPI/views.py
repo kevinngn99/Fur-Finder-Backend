@@ -7,11 +7,11 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.contrib.auth.models import User
-
+from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.views import ObtainAuthToken
 
 from .serializers import PetSerializer, FidoFinderSerializer, HelpingLostPetsSerializer, LostMyDoggieSerializer, PawBoostSerializer, PetKeySerializer, TabbyTrackerSerializer, imageReportSerializer, RegistrationSerializer
-from .models import Pet, FidoFinder, HelpingLostPets, LostMyDoggie, PawBoost, PetKey, TabbyTracker, imageReport
+from .models import Pet, FidoFinder, HelpingLostPets, LostMyDoggie, PawBoost, PetKey, TabbyTracker, imageReport, Account
 
 from Webscraping.scrapers.fidofinder_scrap import FidoFinderScrap
 from Webscraping.scrapers.helpinglostpets_scrap import HelpingLostPetsScrap
@@ -22,7 +22,7 @@ from Webscraping.scrapers.tabbytracker_scrap import TabbyTrackerScrap
 
 
 class RegisterViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all().order_by('id')
+    queryset = Account.objects.all().order_by('id')
     serializer_class = RegistrationSerializer
 
     def post(self, request, format=None):
@@ -35,6 +35,9 @@ class RegisterViewSet(viewsets.ModelViewSet):
             data['response'] = "successfully registered a new user."
             data['email'] = account.email
             data['username'] = account.username
+            token = Token.objects.get(user=account).key
+            data['token'] = token
+            print("Token " + token)
         else:
             data = serializer.errors
         return Response(data)

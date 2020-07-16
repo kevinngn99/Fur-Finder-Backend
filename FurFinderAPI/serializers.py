@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from .models import Pet, FidoFinder, HelpingLostPets, LostMyDoggie, PawBoost, PetKey, TabbyTracker, imageReport
-from django.contrib.auth.models import User
+from .models import Pet, FidoFinder, HelpingLostPets, LostMyDoggie, PawBoost, PetKey, TabbyTracker, imageReport, Account
 
 
 class RegistrationSerializer(serializers.HyperlinkedModelSerializer):
@@ -8,11 +7,11 @@ class RegistrationSerializer(serializers.HyperlinkedModelSerializer):
     password2 = serializers.CharField(style={'input_type': 'password'}, write_only=True)
 
     class Meta:
-        model = User
+        model = Account
         fields = ['email', 'username', 'password', 'password2']
 
     def save(self):
-        account = User(
+        account = Account(
                     email=self.validated_data['email'],
                     username=self.validated_data['username'],
         )

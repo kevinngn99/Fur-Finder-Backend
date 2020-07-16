@@ -39,8 +39,17 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'FurFinderAPI.apps.FurfinderapiConfig',
     'rest_framework',
-    'corsheaders'
+    'corsheaders',
+    'rest_framework.authtoken',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
+
+AUTH_USER_MODEL = 'FurFinderAPI.Account'
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -132,5 +141,5 @@ ALLOWED_HOSTS = ['10.0.0.30', '127.0.0.1', '192.168.86.28', '10.253.253.111', '1
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-import django_heroku
-django_heroku.settings(locals())
+#import django_heroku
+#django_heroku.settings(locals())

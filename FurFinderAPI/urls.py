@@ -1,6 +1,9 @@
+from django.conf.urls import url
 from django.urls import include, path
 from rest_framework import routers
 from . import views
+from rest_framework.authtoken.views import obtain_auth_token
+
 
 router = routers.DefaultRouter()
 router.register(r'api/register/', views.RegisterViewSet)
@@ -24,5 +27,6 @@ router.register(r'^api/tabbytracker/(?P<zip>[0-9]+)', views.TabbyTrackerSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls', namespace = 'rest_framework'))
+    path('api-auth/', include('rest_framework.urls', namespace = 'rest_framework')),
+    path('api/login/', obtain_auth_token, name='login'),
 ]
