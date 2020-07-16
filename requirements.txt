@@ -28,6 +28,7 @@ multidict
 packaging
 pathlib-mate
 pep517
+Pillow
 progress
 psycopg2
 pycodestyle
