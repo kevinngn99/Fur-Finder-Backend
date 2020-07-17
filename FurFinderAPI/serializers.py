@@ -38,7 +38,20 @@ class PetSerializer(serializers.HyperlinkedModelSerializer):
 
     def create(self, validated_data):
         images_data = self.context.get('view').request.FILES
-        pet = Pet.objects.create()
+        pet = Pet.objects.create(
+            age = validated_data.get('age'),
+            breed = validated_data.get('breed'),
+            city = validated_data.get('city'),
+            color = validated_data.get('color'),
+            date = validated_data.get('date'),
+            gender = validated_data.get('gender'),
+            name = validated_data.get('name'),
+            petid = validated_data.get('petid'),
+            size = validated_data.get('size'),
+            state = validated_data.get('state'),
+            status = validated_data.get('status'),
+            zip = validated_data.get('zip')
+        )
 
         for image_data in images_data.values():
             PetImage.objects.create(pet=pet, image=image_data)
