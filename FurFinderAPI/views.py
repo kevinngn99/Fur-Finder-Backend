@@ -20,9 +20,6 @@ from Webscraping.scrapers.pawboost_scrap import PawBoostScrap
 from Webscraping.scrapers.petkey_scrap import PetKeyScrap
 from Webscraping.scrapers.tabbytracker_scrap import TabbyTrackerScrap
 
-import logging
-logger = logging.getLogger('django')
-
 
 class RegisterViewSet(viewsets.ModelViewSet):
     queryset = Account.objects.all().order_by('id')
