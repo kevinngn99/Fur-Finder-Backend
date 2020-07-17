@@ -13,13 +13,16 @@ class Pet(models.Model):
     color = models.TextField(default='Color')
     date = models.TextField(default='Date')
     gender = models.TextField(default='Gender')
-    image = models.ImageField(upload_to='images/')
     name = models.TextField(default='Name')
     petid = models.TextField(default='PetID')
     size = models.TextField(default='Size')
     state = models.TextField(default='State')
     status = models.TextField(default='Status')
     zip = models.TextField(default='Zip')
+
+class PetImage(models.Model):
+    pet = models.ForeignKey(Pet, related_name='images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='images/', default=None, blank=True, null=True)
 
 class FidoFinder(models.Model):
     age = models.TextField(default='Age')

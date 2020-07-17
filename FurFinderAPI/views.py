@@ -11,7 +11,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 
 from .serializers import PetSerializer, FidoFinderSerializer, HelpingLostPetsSerializer, LostMyDoggieSerializer, PawBoostSerializer, PetKeySerializer, TabbyTrackerSerializer, imageReportSerializer, RegistrationSerializer
-from .models import Pet, FidoFinder, HelpingLostPets, LostMyDoggie, PawBoost, PetKey, TabbyTracker, imageReport, Account
+from .models import Pet, PetImage, FidoFinder, HelpingLostPets, LostMyDoggie, PawBoost, PetKey, TabbyTracker, imageReport, Account
 
 from Webscraping.scrapers.fidofinder_scrap import FidoFinderScrap
 from Webscraping.scrapers.helpinglostpets_scrap import HelpingLostPetsScrap
@@ -19,6 +19,9 @@ from Webscraping.scrapers.lostmydoggie_scrap import LostMyDoggieScrap
 from Webscraping.scrapers.pawboost_scrap import PawBoostScrap
 from Webscraping.scrapers.petkey_scrap import PetKeyScrap
 from Webscraping.scrapers.tabbytracker_scrap import TabbyTrackerScrap
+
+import logging
+logger = logging.getLogger('django')
 
 
 class RegisterViewSet(viewsets.ModelViewSet):
@@ -55,7 +58,6 @@ class PetViewSet(viewsets.ModelViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 class FidoFinderSet(viewsets.ModelViewSet):
     queryset = FidoFinder.objects.all().order_by('date')

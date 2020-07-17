@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Pet, FidoFinder, HelpingLostPets, LostMyDoggie, PawBoost, PetKey, TabbyTracker, imageReport, Account
+from .models import Pet, PetImage, FidoFinder, HelpingLostPets, LostMyDoggie, PawBoost, PetKey, TabbyTracker, imageReport, Account
 
 
 class RegistrationSerializer(serializers.HyperlinkedModelSerializer):
@@ -24,11 +24,26 @@ class RegistrationSerializer(serializers.HyperlinkedModelSerializer):
         account.save()
         return account
 
+class PetImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PetImage
+        fields = ('image', )
 
 class PetSerializer(serializers.HyperlinkedModelSerializer):
+    images = PetImageSerializer(many=True, read_only=True)
+
     class Meta:
         model = Pet
-        fields = ('age', 'breed', 'city', 'color', 'date', 'gender', 'image', 'name', 'petid', 'size', 'state', 'status', 'zip')
+        fields = ('age', 'breed', 'city', 'color', 'date', 'gender', 'images', 'name', 'petid', 'size', 'state', 'status', 'zip')
+
+    def create(self, validated_data):
+        images_data = self.context.get('view').request.FILES
+        pet = Pet.objects.create()
+
+        for image_data in images_data.values():
+            PetImage.objects.create(pet=pet, image=image_data)
+
+        return pet
 
 class FidoFinderSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
