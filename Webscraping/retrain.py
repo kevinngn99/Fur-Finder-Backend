@@ -10,11 +10,11 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.python.keras.models import load_model
 
 #getting data
-_URL = 'https://storage.googleapis.com/mledu-datasets/cats_and_dogs_filtered.zip'
+# _URL = 'https://storage.googleapis.com/mledu-datasets/cats_and_dogs_filtered.zip'
+#
+# path_to_zip = tf.keras.utils.get_file('cats_and_dogs.zip', origin=_URL, extract=True)
 
-path_to_zip = tf.keras.utils.get_file('cats_and_dogs.zip', origin=_URL, extract=True)
-
-PATH = os.path.join(os.path.dirname("."), 'cats_and_dogs_filtered')
+PATH = os.path.join(os.path.dirname("."), '/Users/darkswordss/.keras/datasets/cats_and_dogs_filtered')
 
 base_dir = PATH
 train_dir = os.path.join(base_dir, 'train')
@@ -90,7 +90,7 @@ EPOCHS = 3
 
 
 
-history = model.fit_generator(
+history = model.fit(
     train_data_gen,
     steps_per_epoch=int(np.ceil(total_train / float(BATCH_SIZE))),
     epochs=EPOCHS,
