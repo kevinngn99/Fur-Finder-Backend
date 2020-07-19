@@ -58,7 +58,7 @@ train_data_gen = train_image_generator.flow_from_directory(batch_size=BATCH_SIZE
                                                            target_size=(IMG_SHAPE, IMG_SHAPE),
                                                            class_mode='binary')
 
-val_data_gen = train_image_generator.flow_from_directory(batch_size=BATCH_SIZE,
+val_data_gen = validation_image_generator.flow_from_directory(batch_size=BATCH_SIZE,
                                                          directory=validation_dir,
                                                          shuffle=False,
                                                          target_size=(IMG_SHAPE, IMG_SHAPE),
@@ -75,6 +75,7 @@ mobile_net.trainable = False
 
 model = tf.keras.models.Sequential([
     mobile_net,
+    tf.keras.layers.Dropout(0.5),
     tf.keras.layers.Dense(3, activation='softmax')  # [0, 1] or [1, 0]
 ])
 
@@ -84,7 +85,7 @@ model.compile(optimizer='adam',
 
 model.summary()
 
-EPOCHS = 10
+EPOCHS = 3
 
 
 
