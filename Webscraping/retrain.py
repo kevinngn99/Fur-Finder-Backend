@@ -10,11 +10,11 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.python.keras.models import load_model
 
 #getting data
-_URL = 'https://storage.googleapis.com/mledu-datasets/cats_and_dogs_filtered.zip'
+# _URL = 'https://storage.googleapis.com/mledu-datasets/cats_and_dogs_filtered.zip'
+#
+# path_to_zip = tf.keras.utils.get_file('cats_and_dogs.zip', origin=_URL, extract=True)
 
-path_to_zip = tf.keras.utils.get_file('cats_and_dogs.zip', origin=_URL, extract=True)
-
-PATH = os.path.join(os.path.dirname("."), 'cats_and_dogs_filtered')
+PATH = os.path.join(os.path.dirname("."), '/Users/darkswordss/.keras/datasets/cats_and_dogs_filtered')
 
 base_dir = PATH
 train_dir = os.path.join(base_dir, 'train')
@@ -58,7 +58,7 @@ train_data_gen = train_image_generator.flow_from_directory(batch_size=BATCH_SIZE
                                                            target_size=(IMG_SHAPE, IMG_SHAPE),
                                                            class_mode='binary')
 
-val_data_gen = train_image_generator.flow_from_directory(batch_size=BATCH_SIZE,
+val_data_gen = validation_image_generator.flow_from_directory(batch_size=BATCH_SIZE,
                                                          directory=validation_dir,
                                                          shuffle=False,
                                                          target_size=(IMG_SHAPE, IMG_SHAPE),
@@ -75,6 +75,7 @@ mobile_net.trainable = False
 
 model = tf.keras.models.Sequential([
     mobile_net,
+    tf.keras.layers.Dropout(0.5),
     tf.keras.layers.Dense(3, activation='softmax')  # [0, 1] or [1, 0]
 ])
 
@@ -84,12 +85,12 @@ model.compile(optimizer='adam',
 
 model.summary()
 
-EPOCHS = 10
+EPOCHS = 3
 
 
 
 
-history = model.fit_generator(
+history = model.fit(
     train_data_gen,
     steps_per_epoch=int(np.ceil(total_train / float(BATCH_SIZE))),
     epochs=EPOCHS,
