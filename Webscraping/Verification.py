@@ -1,6 +1,7 @@
 
 from prediction import reportPrediction
 from prediction import load_image
+from prediction import getImage
 from profanity import profanity
 import sqlite3
 
@@ -32,7 +33,8 @@ def removePet(id):
     conn = sqlite3.connect('../db.sqlite3')
     c = conn.cursor()
     c.execute("DELETE FROM FurFinderAPI_pet WHERE petid =='"+ str(id) +"';")
-    conn.commit()
+    #remove comment to commit to database
+    #conn.commit()
     conn.close()
 
 
@@ -53,13 +55,14 @@ def removeNonPetImage():
     imageListing=c.execute("SELECT image,petid FROM FurFinderAPI_pet ;").fetchall()
 
     for i in range(len(imageListing)):
-        load_image("../media/"+imageListing[i][0])
-        predict = reportPrediction()
+        predict = reportPrediction("../media/"+imageListing[i][0])
         if predict == "is not a pet":
             removePet(imageListing[i][1])
             print(str(imageListing[i][1])+" removed. not a pet ")
         else: print("Pet id : " + str(imageListing[i][1])+" not removed because it's a pet")
-    conn.commit()
+
+    #uncomment for database changes to take effect
+    #conn.commit()
     conn.close()
 
 #removes all listings of pets where the breed, name, city,and zip contain profanity

@@ -8,8 +8,10 @@ import sys
 sys.path.append('../')
 
 
-def getImageFromInternet(url):
-    urllib.request.urlretrieve(url, "img.png")
+def getImage(filename):
+    with open(filename,'rb')as img:
+        print()
+
 
 
 def load_image(filename):
@@ -25,11 +27,11 @@ def load_image(filename):
     return img
 
 
-def getPerdiction(model):
-    perdiction = model.predict(load_image("img.png"))
+def getPerdiction(model,filename):
+    perdiction = model.predict(load_image(filename))
     print(perdiction)
-    if (perdiction[0][0] + perdiction[0][1])>0.75:
-        print("pet confidence : ",perdiction[0][0] + perdiction[0][1])
+    if perdiction[0][0] >.60 or  perdiction[0][1]>0.60 or perdiction[0][1]+perdiction[0][0]>.52 :
+        #print("pet confidence : ",perdiction[0][0] + perdiction[0][1])
         return "is a pet"
     else: return "is not a pet"
 
@@ -48,6 +50,6 @@ def prediction(url):
     getImageFromInternet(url)
     return getPerdiction(model)
 
-def reportPrediction():
-    model = load_model("cat_dog_model")
-    return getPerdiction(model) 
+def reportPrediction(filename):
+    model = load_model("../Webscraping/cat_dog_model")
+    return getPerdiction(model,filename)
