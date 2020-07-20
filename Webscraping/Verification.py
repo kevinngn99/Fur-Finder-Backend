@@ -57,6 +57,7 @@ def removeNonPetImage():
         predict = reportPrediction()
         if predict == "is not a pet":
             removePet(imageListing[i][1])
+            print(str(imageListing[i][1])+" removed. not a pet ")
         else: print("Pet id : " + str(imageListing[i][1])+" not removed because it's a pet")
     conn.commit()
     conn.close()
