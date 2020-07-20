@@ -4,11 +4,12 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from bs4 import BeautifulSoup
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.permissions import IsAuthenticated
 
 from .serializers import PetSerializer, FidoFinderSerializer, HelpingLostPetsSerializer, LostMyDoggieSerializer, PawBoostSerializer, PetKeySerializer, TabbyTrackerSerializer, imageReportSerializer, RegistrationSerializer
 from .models import Pet, PetImage, FidoFinder, HelpingLostPets, LostMyDoggie, PawBoost, PetKey, TabbyTracker, imageReport, Account
@@ -44,8 +45,19 @@ class RegisterViewSet(viewsets.ModelViewSet):
 
 
 class PetViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]  # a non registered user cannot access this view
     queryset = Pet.objects.all().order_by('date')
     serializer_class = PetSerializer
+
+    # if we had an edit or delete method we would have to add an author to the post
+    # and do the following inside the delete method
+    # user = request.user  # which gets the user with that token
+    # if pet_post.author != user:
+    #   return Response({'response': "You don't have permission to delete that"})
+
+    # for create we'd only have to set the following
+    # account = request.user
+    # pet_post = Pet(author=account)
 
     def post(self, request, formant=None):
         queryset = self.filter_queryset(self.get_queryset())
@@ -55,6 +67,7 @@ class PetViewSet(viewsets.ModelViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class FidoFinderSet(viewsets.ModelViewSet):
     queryset = FidoFinder.objects.all().order_by('date')
@@ -69,6 +82,7 @@ class FidoFinderSet(viewsets.ModelViewSet):
             new_serializer = FidoFinderScrap().scrap(kwargs['zip'])[0]
         
         return Response(new_serializer)
+
 
 class HelpingLostPetsSet(viewsets.ModelViewSet):
     queryset = HelpingLostPets.objects.all().order_by('date')
@@ -86,6 +100,7 @@ class HelpingLostPetsSet(viewsets.ModelViewSet):
         
         return Response(new_serializer)
 
+
 class LostMyDoggieSet(viewsets.ModelViewSet):
     queryset = LostMyDoggie.objects.all().order_by('date')
     serializer_class = LostMyDoggieSerializer
@@ -101,6 +116,7 @@ class LostMyDoggieSet(viewsets.ModelViewSet):
                 new_serializer.append(scrapped)
         
         return Response(new_serializer)
+
 
 class PawBoostSet(viewsets.ModelViewSet):
     queryset = PawBoost.objects.all().order_by('date')
@@ -118,6 +134,7 @@ class PawBoostSet(viewsets.ModelViewSet):
         
         return Response(new_serializer)
 
+
 class PetKeySet(viewsets.ModelViewSet):
     queryset = PetKey.objects.all().order_by('name')
     serializer_class = PetKeySerializer
@@ -132,6 +149,7 @@ class PetKeySet(viewsets.ModelViewSet):
         
         return Response(new_serializer)
 
+
 class TabbyTrackerSet(viewsets.ModelViewSet):
     queryset = TabbyTracker.objects.all().order_by('date')
     serializer_class = TabbyTrackerSerializer
@@ -145,6 +163,7 @@ class TabbyTrackerSet(viewsets.ModelViewSet):
             new_serializer = TabbyTrackerScrap().scrap(kwargs['zip'])[0]
         
         return Response(new_serializer)
+
 
 class imageReportViewSet(viewsets.ModelViewSet):
     queryset = imageReport.objects.all()
