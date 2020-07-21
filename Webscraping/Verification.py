@@ -59,7 +59,7 @@ def removeNonPetImage():
         if predict == "is not a pet":
             removePet(imageListing[i][1])
             print(str(imageListing[i][1])+" removed. not a pet ")
-        else: print("Pet id : " + str(imageListing[i][1])+" not removed because it's a pet")
+        else: print(str(imageListing[i][1])+" not removed because it's a pet")
 
     #uncomment for database changes to take effect
     #conn.commit()
