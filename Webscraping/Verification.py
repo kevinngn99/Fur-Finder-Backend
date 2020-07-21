@@ -52,7 +52,7 @@ def removeFoundPets():
 def removeNonPetImage():
     conn = sqlite3.connect('../db.sqlite3')
     c = conn.cursor()
-    imageListing=c.execute("SELECT image,petid FROM FurFinderAPI_pet ;").fetchall()
+    imageListing=c.execute("SELECT image,id FROM FurFinderAPI_petimage ;").fetchall()
 
     for i in range(len(imageListing)):
         predict = reportPrediction("../media/"+imageListing[i][0])
