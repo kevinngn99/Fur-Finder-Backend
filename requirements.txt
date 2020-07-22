@@ -43,7 +43,7 @@ six
 soupsieve
 SQLAlchemy
 sqlparse
-tensorflow
+tensorflow-cpu
 toml
 urllib3
 uszipcode
