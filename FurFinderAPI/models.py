@@ -22,7 +22,7 @@ class Pet(models.Model):
 
 class PetImage(models.Model):
     pet = models.ForeignKey(Pet, related_name='images', on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='images/', default=None, blank=True, null=True)
+    image = models.TextField(default=None, blank=True, null=True)
 
 class FidoFinder(models.Model):
     age = models.TextField(default='Age')

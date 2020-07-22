@@ -55,19 +55,19 @@ class PetKeyScrap:
             zip = location[-5:]
             location = location[:-6]
 
-            print('----------------')
-            print(age)
-            print(breed)
-            print(color)
-            print(date)
-            print(gender)
-            print(image)
-            print(location)
-            print(name)
-            print(petid)
-            print(size)
-            print(status)
-            print(zip)
+            #print('----------------')
+            #print(age)
+            #print(breed)
+            #print(color)
+            #print(date)
+            #print(gender)
+            #print(image)
+            #print(location)
+            #print(name)
+            #print(petid)
+            #print(size)
+            #print(status)
+            #print(zip)
 
             dict = {
                 'age': age,

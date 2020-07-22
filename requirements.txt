@@ -17,6 +17,7 @@ Django
 django-cors-headers
 django-heroku
 djangorestframework
+grequests
 gunicorn
 html5lib
 idna

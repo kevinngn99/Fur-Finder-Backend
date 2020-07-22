@@ -10,6 +10,9 @@ from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.permissions import IsAuthenticated
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+from django.conf import settings
 
 from .serializers import PetSerializer, FidoFinderSerializer, HelpingLostPetsSerializer, LostMyDoggieSerializer, PawBoostSerializer, PetKeySerializer, TabbyTrackerSerializer, imageReportSerializer, RegistrationSerializer
 from .models import Pet, PetImage, FidoFinder, HelpingLostPets, LostMyDoggie, PawBoost, PetKey, TabbyTracker, imageReport, Account
@@ -20,7 +23,11 @@ from Webscraping.scrapers.lostmydoggie_scrap import LostMyDoggieScrap
 from Webscraping.scrapers.pawboost_scrap import PawBoostScrap
 from Webscraping.scrapers.petkey_scrap import PetKeyScrap
 from Webscraping.scrapers.tabbytracker_scrap import TabbyTrackerScrap
+from Webscraping.prediction import reportPrediction
+from profanity import profanity
 
+import os
+import tempfile
 
 class RegisterViewSet(viewsets.ModelViewSet):
     queryset = Account.objects.all().order_by('id')
@@ -59,14 +66,28 @@ class PetViewSet(viewsets.ModelViewSet):
     # account = request.user
     # pet_post = Pet(author=account)
 
-    def post(self, request, formant=None):
-        queryset = self.filter_queryset(self.get_queryset())
-        serializer = self.get_serializer(queryset, many=True, data=request.data, files=request.files)
+    def create(self, request, **kwargs):
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        '''
+        for key, value in request.FILES.items():
+
+            fd, path = tempfile.mkstemp()
+
+            try:
+                with os.fdopen(fd, 'wb') as tmp:
+                    tmp.write(value.read())
+                    
+                    predict = reportPrediction(path)
+                    
+                    if predict == "is not a pet":
+                        print(value, 'Removed because image is NOT a pet.')
+                    else:
+                        print(value,  'Not removed because image IS a pet.')
+            finally:
+                os.remove(path)
+        '''
+        
+        return super().create(request)
 
 
 class FidoFinderSet(viewsets.ModelViewSet):

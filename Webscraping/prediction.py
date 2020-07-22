@@ -51,5 +51,9 @@ def prediction(url):
     return getPerdiction(model)
 
 def reportPrediction(filename):
-    model = load_model("../Webscraping/cat_dog_model")
+    model = load_model(os.path.join(os.path.dirname(__file__), '../Webscraping/cat_dog_model'))
     return getPerdiction(model,filename)
+
+def testLocalImages(filename):
+    model = load_model(os.path.join(os.path.dirname(__file__), '../Webscraping/cat_dog_model'))
+    return getPerdiction(model, os.path.join(os.path.dirname(__file__), '../media/images/' + filename))

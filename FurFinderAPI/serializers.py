@@ -1,6 +1,9 @@
 from rest_framework import serializers
 from .models import Pet, PetImage, FidoFinder, HelpingLostPets, LostMyDoggie, PawBoost, PetKey, TabbyTracker, imageReport, Account
+from GoogleDrive.google_drive import GoogleDrive
 
+import os
+import tempfile
 
 class RegistrationSerializer(serializers.HyperlinkedModelSerializer):
     password = serializers.CharField(style={'input_type': 'password'}, write_only=True)
@@ -37,7 +40,8 @@ class PetSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('age', 'breed', 'city', 'color', 'date', 'gender', 'images', 'name', 'petid', 'size', 'state', 'status', 'zip')
 
     def create(self, validated_data):
-        images_data = self.context.get('view').request.FILES
+        image_list = self.context.get('view').request.FILES
+
         pet = Pet.objects.create(
             age = validated_data.get('age'),
             breed = validated_data.get('breed'),
@@ -53,8 +57,29 @@ class PetSerializer(serializers.HyperlinkedModelSerializer):
             zip = validated_data.get('zip')
         )
 
-        for image_data in images_data.values():
-            PetImage.objects.create(pet=pet, image=image_data)
+        google_drive = GoogleDrive()
+        paths = []
+        imgs = []
+
+        for image in image_list.values():
+            fd, path = tempfile.mkstemp()
+
+            temp = os.fdopen(fd, 'wb')
+            temp.write(image.read())
+                
+            paths.append(path)
+            imgs.append(temp)
+
+        urls = google_drive.upload(paths)
+                    
+        for path in paths:
+            os.remove(path)
+
+        for img in imgs:
+            img.close()
+
+        for url in urls:
+            PetImage.objects.create(pet=pet, image=url)
 
         return pet
 
