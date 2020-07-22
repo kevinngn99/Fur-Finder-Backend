@@ -58,25 +58,12 @@ class PetSerializer(serializers.HyperlinkedModelSerializer):
         )
 
         google_drive = GoogleDrive()
-        paths = []
-        imgs = []
+        data = []
 
         for image in image_list.values():
-            fd, path = tempfile.mkstemp()
+            data.append(image.read())
 
-            temp = os.fdopen(fd, 'wb')
-            temp.write(image.read())
-                
-            paths.append(path)
-            imgs.append(temp)
-
-        urls = google_drive.upload(paths)
-                    
-        for path in paths:
-            os.remove(path)
-
-        for img in imgs:
-            img.close()
+        urls = google_drive.run(data)
 
         for url in urls:
             PetImage.objects.create(pet=pet, image=url)

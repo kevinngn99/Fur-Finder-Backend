@@ -1,4 +1,4 @@
-import grequests
+import asyncio
 import json
 import requests
 
@@ -27,23 +27,20 @@ class GoogleDrive:
             #print(result.text)
             return None
 
-    def upload(self, files):
+    async def upload(self, files):
         try:
             access_token = self.get_access_token()
             drive_url = 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart'
             headers = {
                 'Authorization': 'Bearer ' + access_token
             }
-
-            reqs = []
-            imgs = []
             urls = []
 
             if access_token != None:
-                for file in files:
-                    image = open(file, 'rb')
-                    imgs.append(image)
+                images = []
+                responses = []
 
+                for file in files:
                     parameters = {
                         'name': 'image',
                         'parents': ['1ibXfz1zlk6V8yjjfVp6532Og1nQZ3Jx_']
@@ -51,14 +48,14 @@ class GoogleDrive:
 
                     files = {
                         'data': ('metadata', json.dumps(parameters), 'application/json; charset=UTF-8'),
-                        'file': image
+                        'file': file
                     }
-                    reqs.append(grequests.post(drive_url, headers=headers, files=files))
 
-                results = grequests.map(reqs)
-
-                for img in imgs:
-                    img.close()
+                    images.append(dict(url=drive_url, headers=headers, files=files))
+                
+                loop = asyncio.get_event_loop()
+                responses = [loop.run_in_executor(None, lambda: requests.post(**image)) for image in images]
+                results = await asyncio.gather(*responses)
 
                 for result in results:
                     if result.ok:
@@ -71,9 +68,26 @@ class GoogleDrive:
                         #print(result.text)
                         pass
 
+                #print(urls)
+
             return urls
         except:
             pass
 
+    def run(self, data):
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        return loop.run_until_complete(self.upload(data))
+
 #if __name__ == "__main__":
-    #GoogleDrive().upload(['corgi.jpg', 'office.jpg', 'moi.jpg'])
+    #images = ['corgi.jpg', 'office.jpg', 'moi.jpg']
+    #data = []
+
+    #for image in images:
+        #with open(image, 'rb') as img:
+            #data.append(img.read())
+
+    #google_drive = GoogleDrive()
+
+    #loop = asyncio.get_event_loop()
+    #loop.run_until_complete(google_drive.upload(data))
