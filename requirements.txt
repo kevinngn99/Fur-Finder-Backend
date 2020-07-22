@@ -30,6 +30,7 @@ packaging
 pathlib-mate
 pep517
 Pillow
+profanity
 progress
 psycopg2
 pycodestyle
