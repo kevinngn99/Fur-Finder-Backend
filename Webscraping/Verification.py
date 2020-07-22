@@ -52,14 +52,14 @@ def removeFoundPets():
 def removeNonPetImage():
     conn = sqlite3.connect('../db.sqlite3')
     c = conn.cursor()
-    imageListing=c.execute("SELECT image,pet_id FROM FurFinderAPI_petimage ;").fetchall()
+    imageListing=c.execute("SELECT image,id FROM FurFinderAPI_petimage ;").fetchall()
 
     for i in range(len(imageListing)):
         predict = reportPrediction("../media/"+imageListing[i][0])
         if predict == "is not a pet":
             removePet(imageListing[i][1])
             print(str(imageListing[i][1])+" removed. not a pet ")
-        else: print("Pet id : " + str(imageListing[i][1])+" not removed because it's a pet")
+        else: print(str(imageListing[i][1])+" not removed because it's a pet")
 
     #uncomment for database changes to take effect
     #conn.commit()
