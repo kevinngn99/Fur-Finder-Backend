@@ -18,6 +18,7 @@ class Pet(models.Model):
     size = models.TextField(default='Size')
     state = models.TextField(default='State')
     status = models.TextField(default='Status')
+    summary = models.TextField(default='N/A')
     zip = models.TextField(default='Zip')
 
 class PetImage(models.Model):

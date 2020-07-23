@@ -37,7 +37,7 @@ class PetSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Pet
-        fields = ('age', 'breed', 'city', 'color', 'date', 'gender', 'images', 'name', 'petid', 'size', 'state', 'status', 'zip')
+        fields = ('age', 'breed', 'city', 'color', 'date', 'gender', 'images', 'name', 'petid', 'size', 'state', 'status', 'summary', 'zip')
 
     def create(self, validated_data):
         image_list = self.context.get('view').request.FILES
@@ -54,6 +54,7 @@ class PetSerializer(serializers.HyperlinkedModelSerializer):
             size = validated_data.get('size'),
             state = validated_data.get('state'),
             status = validated_data.get('status'),
+            summary = validated_data.get('summary'),
             zip = validated_data.get('zip')
         )
 
