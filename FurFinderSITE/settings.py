@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'rest_framework.authtoken',
+    'Messaging.chat',
 ]
 
 REST_FRAMEWORK = {
@@ -67,7 +68,7 @@ ROOT_URLCONF = 'FurFinderSITE.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -140,6 +141,3 @@ ALLOWED_HOSTS = ['10.0.0.30', '127.0.0.1', '192.168.86.64', '10.253.253.111', '1
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-import django_heroku
-django_heroku.settings(locals())
