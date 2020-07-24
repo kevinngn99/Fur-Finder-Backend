@@ -102,8 +102,12 @@ class HelpingLostPetsScrap:
             url = 'https://www.helpinglostpets.com/v2/OrgPet.aspx?oid=' + str(states[state])
             og_soup = BeautifulSoup(requests.get(url).text, 'lxml')
             soup = self.soup(url, og_soup, 1)
-            cssPager = soup.find('tr', {'class': 'cssPager'}).td.font.table.tr
-            length = len(cssPager.find_all('td'))
+            length = None
+            try:
+                cssPager = soup.find('tr', {'class': 'cssPager'}).td.font.table.tr
+                length = len(cssPager.find_all('td'))
+            except:
+                length = 1
 
             count = 1
 
@@ -180,5 +184,5 @@ class HelpingLostPetsScrap:
 
         return json
 
-#if __name__ == "__main__":
-    #HelpingLostPetsScrap().scrap('33990')
+if __name__ == "__main__":
+    HelpingLostPetsScrap().scrap('33990')
