@@ -1,15 +1,15 @@
 from django.conf.urls import url
-from channels.routing import ProtocolTypeRouter,URLRouter
+from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
-from channels.security.websocket import AllowedHostOriginValidator,OriginValidator
-from chat.consumer import ChatConsumer
+from channels.security.websocket import AllowedHostsOriginValidator, OriginValidator
 
+from Messaging.chat.consumers import ChatConsumer
 application = ProtocolTypeRouter({
-    'websocket' : AllowedHostOriginValidator(
+    'websocket': AllowedHostsOriginValidator(
         AuthMiddlewareStack(
             URLRouter(
                 [
-                    url(r"^messages/(?P<username>[\w.@+-]+)$", ChatConsumer),
+                    url(r"^(?P<username>[\w.@+-]+)", ChatConsumer),
                 ]
             )
         )

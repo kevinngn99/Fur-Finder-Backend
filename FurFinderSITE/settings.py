@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework.authtoken',
     'Messaging.chat',
+    'channels',
 ]
 
 REST_FRAMEWORK = {
@@ -137,7 +138,7 @@ STATIC_URL = '/static/'
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
 
-ALLOWED_HOSTS = ['10.0.0.30', '127.0.0.1', '192.168.86.64', '10.253.253.111', '10.0.0.64', '192.168.86.28', '192.168.2.8']
+ALLOWED_HOSTS = ['10.0.0.30', '127.0.0.1', '192.168.86.64', '10.253.253.111', '10.0.0.64', '192.168.86.28', '192.168.2.8', '192.168.0.145']
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
