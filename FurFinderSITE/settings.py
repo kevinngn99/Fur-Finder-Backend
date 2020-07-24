@@ -82,7 +82,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'FurFinderSITE.wsgi.application'
-
+ASGI_APPLICATION = "FurFinderSITE.routing.application"
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases

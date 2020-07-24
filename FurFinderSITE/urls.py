@@ -23,7 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('FurFinderAPI.urls')),
     path('', TemplateView.as_view(template_name="home.html")),
-    path('admin/', admin.site.urls),
     path('messages/', include('Messaging.chat.urls')),
 ]
 
