@@ -25,8 +25,10 @@ class ThreadView(LoginRequiredMixin, FormMixin, DetailView):
         return Thread.objects.by_user(self.request.user)
 
     def get_object(self):
+        print('kwargs user', self.kwargs['username'])
         other_username  = self.kwargs["username"]
-        user1=self.request.user.username
+        user1=self.request.user
+        print('user', self.request.user)
         print("getobj",other_username,user1)
         obj, created    = Thread.objects.get_or_new(user1, other_username)
         if obj == None:

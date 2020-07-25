@@ -135,6 +135,17 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+#for REDIS
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("localhost", 6379)],
+            #"hosts": [os.eviron.get('REDIS_URL', 'redis://localhost:6379')], HEROKU? 54:00
+        },
+    },
+}
+
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
 
