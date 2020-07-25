@@ -61,7 +61,8 @@ class GoogleDrive:
                     if result.ok:
                         #print('Success.')
                         #print(result.text)
-                        image_url = 'https://drive.google.com/uc?export=view&id=' + result.json()['id']
+                        #image_url = 'https://drive.google.com/uc?export=view&id=' + result.json()['id']
+                        image_url = 'https://drive.google.com/thumbnail?id=' + result.json()['id']
                         urls.append(image_url)
                     else:
                         #print('Fail.')
