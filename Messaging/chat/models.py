@@ -13,7 +13,7 @@ class ThreadManager(models.Manager):
         return qs
 
     def get_or_new(self, user, other_username): # get_or_create
-        username = user.username
+        username = user
         if username == other_username:
             return None
         qlookup1 = Q(first__username=username) & Q(second__username=other_username)
@@ -28,12 +28,13 @@ class ThreadManager(models.Manager):
             user2 = Klass.objects.get(username=other_username)
             if user != user2:
                 obj = self.model(
-                        first=user, 
+                        first=user,
                         second=user2
                     )
                 obj.save()
                 return obj, True
             return None, False
+
 
 
 class Thread(models.Model):

@@ -23,6 +23,9 @@
 // websocket scripts
 console.log(window.location)
 var loc = window.location
+var formData =$("#form")
+var msgInput=$("#id_message")
+
 var wsStart = 'ws://'
 if (loc.protocol == 'https:'){
     wsStart == 'wss://'
@@ -35,6 +38,17 @@ socket.onmessage = function(e){
 }
 socket.onopen = function(e){
     console.log('open', e)
+    formData.submit(function (event) {
+        event.preventDefault()
+        //sends message to backend
+        var msgText=msgInput.val()
+        var finalData = {
+            'message':msgText
+        }
+        socket.send(JSON.stringify(finalData))
+        formData[0].reset()
+
+    })
 }
 socket.onerror = function(e){
     console.log('error', e)
