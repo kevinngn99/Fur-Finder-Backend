@@ -140,10 +140,17 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("localhost", 6379)],
-            #"hosts": [os.eviron.get('REDIS_URL', 'redis://localhost:6379')], HEROKU? 54:00
+            #"hosts": [("localhost", 6379)],
+            "hosts": [os.eviron.get('REDIS_URL', 'redis://localhost:6379')]
         },
     },
+}
+
+CACHES = {
+    "default": {
+         "BACKEND": "redis_cache.RedisCache",
+         "LOCATION": os.environ.get('REDIS_URL')
+    }
 }
 
 CORS_ALLOW_CREDENTIALS = True
