@@ -20,6 +20,7 @@ class Pet(models.Model):
     status = models.TextField(default='Status')
     summary = models.TextField(default='N/A')
     zip = models.TextField(default='Zip')
+    author = models.TextField(default='Author')
 
 class PetImage(models.Model):
     pet = models.ForeignKey(Pet, related_name='images', on_delete=models.CASCADE)
