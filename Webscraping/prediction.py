@@ -13,7 +13,6 @@ def getImage(filename):
         print()
 
 
-
 def load_image(filename):
     # load the image
     img = load_img(filename, target_size=(224, 224))
