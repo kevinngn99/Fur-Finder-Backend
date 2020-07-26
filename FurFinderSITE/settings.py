@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'rest_framework.authtoken',
+    'Messaging.chat',
+    'channels',
 ]
 
 REST_FRAMEWORK = {
@@ -67,7 +69,7 @@ ROOT_URLCONF = 'FurFinderSITE.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -81,7 +83,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'FurFinderSITE.wsgi.application'
-
+ASGI_APPLICATION = "FurFinderSITE.routing.application"
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
@@ -133,13 +135,24 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+#for REDIS
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("localhost", 6379)],
+            #"hosts": [os.eviron.get('REDIS_URL', 'redis://localhost:6379')], HEROKU? 54:00
+        },
+    },
+}
+
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
 
-ALLOWED_HOSTS = ['10.0.0.30', '127.0.0.1', '192.168.86.64', '10.253.253.111', '10.0.0.64', '192.168.86.28', '192.168.86.93']
+ALLOWED_HOSTS = ['10.0.0.30', '127.0.0.1', '192.168.86.64', '10.253.253.111', '10.0.0.64', '192.168.86.28', '192.168.86.93', '192.168.2.8', '192.168.0.145']
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-#import django_heroku
-#django_heroku.settings(locals())
+import django_heroku
+django_heroku.settings(locals())

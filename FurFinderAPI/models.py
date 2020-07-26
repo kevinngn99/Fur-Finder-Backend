@@ -4,6 +4,8 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import User
+
 
 
 class Pet(models.Model):
@@ -115,7 +117,7 @@ class imageReport(models.Model):
 
 
 class MyAccountManager(BaseUserManager):
-    def create_user(self, email, username, password=None):
+    def create_user(self, username,email , password=None):
         if not email:
             raise ValueError('Users must have an email address')
         if not username:
@@ -129,7 +131,7 @@ class MyAccountManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, username, password):
+    def create_superuser(self,  username,email, password):
         user = self.create_user(
             email=self.normalize_email(email),
             password=password,
@@ -152,8 +154,8 @@ class Account(AbstractBaseUser):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email']
 
     objects = MyAccountManager()
 

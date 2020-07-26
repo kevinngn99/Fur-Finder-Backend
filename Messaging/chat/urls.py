@@ -1,9 +1,8 @@
-# chat/urls.py
-from django.urls import path
+from django.urls import path, re_path
+from .views import ThreadView, InboxView
 
-from . import views
-
+app_name = 'chat'
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('<str:room_name>/', views.room, name='room'),
+    path("", InboxView.as_view()),
+    re_path(r"^(?P<username>[\w.@+-]+)", ThreadView.as_view()),
 ]

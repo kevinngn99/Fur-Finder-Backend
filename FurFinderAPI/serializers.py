@@ -12,7 +12,7 @@ class RegistrationSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Account
-        fields = ['email', 'username', 'password', 'password2']
+        fields = ['username', 'email', 'password', 'password2']
 
     def save(self):
         account = Account(
