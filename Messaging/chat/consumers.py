@@ -3,6 +3,8 @@ import json
 from django.contrib.auth import get_user_model
 from channels.consumer import AsyncConsumer
 from channels.db import database_sync_to_async
+from Messaging.messages import postMan
+
 
 from .models import Thread, ChatMessage
 
@@ -52,6 +54,11 @@ class ChatConsumer(AsyncConsumer):
                     'text': json.dumps(myResponse)
                 }
             )
+        
+
+        print('Trying to post')
+        #postMan(USERID, SECONDUSERID, THREADID)
+
 
     async def chat_message(self, event):
         #sends message
@@ -59,6 +66,7 @@ class ChatConsumer(AsyncConsumer):
             'type': 'websocket.send',
             'text': event['text']
         })
+
 
     async def websocket_disconnect(self, event):
         print('disconnected', event)

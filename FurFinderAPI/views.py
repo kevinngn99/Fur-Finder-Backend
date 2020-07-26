@@ -14,8 +14,8 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.conf import settings
 
-from .serializers import PetSerializer, FidoFinderSerializer, HelpingLostPetsSerializer, LostMyDoggieSerializer, PawBoostSerializer, PetKeySerializer, TabbyTrackerSerializer, imageReportSerializer, RegistrationSerializer
-from .models import Pet, PetImage, FidoFinder, HelpingLostPets, LostMyDoggie, PawBoost, PetKey, TabbyTracker, imageReport, Account
+from .serializers import PetSerializer, FidoFinderSerializer, HelpingLostPetsSerializer, LostMyDoggieSerializer, PawBoostSerializer, PetKeySerializer, TabbyTrackerSerializer, imageReportSerializer, RegistrationSerializer, UserMessagesSerializer
+from .models import Pet, PetImage, FidoFinder, HelpingLostPets, LostMyDoggie, PawBoost, PetKey, TabbyTracker, imageReport, Account, UserMessages
 
 from Webscraping.scrapers.fidofinder_scrap import FidoFinderScrap
 from Webscraping.scrapers.helpinglostpets_scrap import HelpingLostPetsScrap
@@ -189,3 +189,7 @@ class TabbyTrackerSet(viewsets.ModelViewSet):
 class imageReportViewSet(viewsets.ModelViewSet):
     queryset = imageReport.objects.all()
     serializer_class = imageReportSerializer
+
+class UserMessagesViewSet(viewsets.ModelViewSet):
+    queryset = UserMessages.objects.all()
+    serializer_class = UserMessagesSerializer

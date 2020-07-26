@@ -6,6 +6,11 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import User
 
+class UserMessages(models.Model):
+    user1 = models.TextField(default='')
+    user2 = models.TextField(default='')
+    threadID = models.TextField(default='')
+    message = models.TextField(default='')
 
 
 class Pet(models.Model):

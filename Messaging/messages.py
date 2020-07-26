@@ -45,22 +45,10 @@ def getUsername(ID):
     return username[0][0]
 
 
-def main():
-    userID = int(input('What is the first userID? '))
-    secondUserID = int(input('What is the second users ID? '))
+def postMan(userID, secondUserID, threadID):
+    messages = getChatMessages(userID, secondUserID, threadID)  
+    messages = str(messages).strip('[]')
+    print(messages)
+    #requests.post('http://192.168.0.145:8000/api/UserMessages//', {'user1': getUsername(userID), 'user2': getUsername(secondUserID), 'threadID': threadID, 'message': messages})
 
-    lowest_thread = findRightThread(userID, secondUserID)
-    messages = getChatMessages(userID, secondUserID, lowest_thread)
-
-    for i in range(len(messages)):
-        if messages[i][4] == userID:
-            print(f'{getUsername(userID)}: {messages[i][1]}')
-        else:
-            print(f'                    {getUsername(secondUserID)}: {messages[i][1]}')
-    
-    requests.post('http://192.168.0.145:8000/api/UserMessages//', {'message': 'test'})
-
-
-
-if __name__ == '__main__':
-    main()
+postMan(4, 7, 47)

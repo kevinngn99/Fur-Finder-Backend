@@ -15,6 +15,8 @@ router.register(r'api/lostmydoggie/', views.LostMyDoggieSet)
 router.register(r'api/pawboost/', views.PawBoostSet)
 router.register(r'api/petkey/', views.PetKeySet)
 router.register(r'api/tabbytracker/', views.TabbyTrackerSet)
+router.register(r'api/UserMessages/', views.UserMessagesViewSet)
+
 
 router.register(r'^api/register/(?P<zip>[0-9]+)', views.RegisterViewSet)
 router.register(r'^api/pets/(?P<zip>[0-9]+)', views.PetViewSet)

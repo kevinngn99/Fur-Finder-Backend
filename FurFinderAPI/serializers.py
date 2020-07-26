@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Pet, PetImage, FidoFinder, HelpingLostPets, LostMyDoggie, PawBoost, PetKey, TabbyTracker, imageReport, Account
+from .models import Pet, PetImage, FidoFinder, HelpingLostPets, LostMyDoggie, PawBoost, PetKey, TabbyTracker, imageReport, Account, UserMessages
 from GoogleDrive.google_drive import GoogleDrive
 
 import os
@@ -26,6 +26,12 @@ class RegistrationSerializer(serializers.HyperlinkedModelSerializer):
         account.set_password(password)
         account.save()
         return account
+
+class UserMessagesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserMessages
+        fields = ('user1', 'user2', 'threadID', 'message')
+
 
 class PetImageSerializer(serializers.ModelSerializer):
     class Meta:
