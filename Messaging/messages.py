@@ -1,4 +1,5 @@
 import sqlite3
+import requests
 
 #Finds the threadID to use for the given users
 def findRightThread(userID, secondUserID):
@@ -16,6 +17,7 @@ def findRightThread(userID, secondUserID):
         if chat_threads_first[i][3] == userID and chat_threads_first[i][4] == secondUserID:
             if chat_threads_first[i][0] < lowest_thread:
                 lowest_thread = chat_threads_first[i][0]
+    for i in range(len(chat_threads_second)):
         if chat_threads_second[i][4] == userID and chat_threads_second[i][3] == secondUserID:
             if chat_threads_second[i][0] < lowest_thread:
                 lowest_thread = chat_threads_second[i][0]
@@ -55,6 +57,9 @@ def main():
             print(f'{getUsername(userID)}: {messages[i][1]}')
         else:
             print(f'                    {getUsername(secondUserID)}: {messages[i][1]}')
+    
+    requests.post('http://192.168.0.145:8000/api/UserMessages//', {'message': 'test'})
+
 
 
 if __name__ == '__main__':
