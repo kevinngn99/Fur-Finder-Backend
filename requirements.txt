@@ -12,6 +12,7 @@ channels-redis
 chardet
 colorama
 contextlib2
+daphne
 distlib
 distro
 dj-database-url
