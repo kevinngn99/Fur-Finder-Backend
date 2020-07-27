@@ -13,12 +13,21 @@
     <script>
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
 
-        console.log(window.location.host)
+        var web;
+        var params;
+        if (window.location.host === 'fur-finder.herokuapp.com') {
+            web = 'wss://';
+            params = '/wss/chatt/';
+        }
+        else {
+            web = 'ws://'
+            params = '/ws/chatt/';
+        }
 
         const chatSocket = new WebSocket(
-            'wss://'
+            web
             + window.location.host
-            + '/ws/chatt/'
+            + params
             + roomName
             + '/'
         );
