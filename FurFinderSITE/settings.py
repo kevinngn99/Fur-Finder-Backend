@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'Messaging.chat',
     'channels',
-    'chatt'
+    'chatt.apps.ChattConfig'
 ]
 
 REST_FRAMEWORK = {
