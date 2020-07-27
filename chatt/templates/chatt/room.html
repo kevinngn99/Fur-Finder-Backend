@@ -13,6 +13,8 @@
     <script>
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
 
+        console.log(window.location.host)
+
         const chatSocket = new WebSocket(
             'wss://'
             + window.location.host
