@@ -3,7 +3,8 @@ import json
 from django.contrib.auth import get_user_model
 from channels.consumer import AsyncConsumer
 from channels.db import database_sync_to_async
-from Messaging.messages import postMan
+import sqlite3
+import requests
 
 
 from .models import Thread, ChatMessage
@@ -14,9 +15,11 @@ class ChatConsumer(AsyncConsumer):
         
         other_user=self.scope['url_route']['kwargs']['username']
         me = self.scope['user'].username
-        print('other_user,me', other_user,me)
+        #gets the earliest theard between two users
         thread_obj= await self.get_thread(me,other_user)
-        print('me, thread_obj.id', me, thread_obj.id)
+
+        #dispays the thread in the debugger window so that the front end can use
+        postMan( thread_obj.id)
         self.thread_obj = thread_obj
 
         chat_room = f"thread_{thread_obj.id}"
@@ -56,8 +59,7 @@ class ChatConsumer(AsyncConsumer):
             )
         
 
-        print('Trying to post')
-        #postMan(USERID, SECONDUSERID, THREADID)
+
 
 
     async def chat_message(self, event):
@@ -79,3 +81,43 @@ class ChatConsumer(AsyncConsumer):
     def create_chat_message(self, me, msg):
         thread_obj  = self.thread_obj
         return ChatMessage.objects.create(thread=thread_obj, user=me, message = msg)
+
+
+# Returns a list of threads between two users in acs order
+def findRightThread(userID, secondUserID):
+    conn = sqlite3.connect('../Fur-Finder-Backend/db.sqlite3')
+    c = conn.cursor()
+    chat_threads= c.execute("SELECT * FROM chat_thread WHERE first_id=="+str(userID)+" and second_id=="+str(secondUserID)+" or first_id=="+str(secondUserID)+" and second_id="+str(userID) +" ORDER by timestamp ASC").fetchall()
+    conn.close()
+    return chat_threads
+
+
+# Finds the chat messages using the threadID
+def getChatMessages(lowest_thread):
+    conn = sqlite3.connect('../Fur-Finder-Backend/db.sqlite3')
+    c = conn.cursor()
+    messages = c.execute("SELECT * FROM chat_chatmessage WHERE thread_id =='" + str(lowest_thread) + "';").fetchall()
+    for index in range(0,len(messages)):
+        print ("From: "+ getUsername(messages[index][4])+"\nMessage: "+messages[index][1]+" @"+str(messages[index][2]),"\n")
+
+    conn.close()
+    return messages
+
+
+# Finds the username based on the ID
+def getUsername(ID):
+    conn = sqlite3.connect('../Fur-Finder-Backend/db.sqlite3')
+    c = conn.cursor()
+    username = c.execute("SELECT username FROM FurFinderAPI_account WHERE id =='" + str(ID) + "';").fetchall()
+    conn.close()
+
+    return username[0][0]
+
+
+def postMan(threadID):
+    messages = getChatMessages(threadID)
+    messages = str(messages).strip('[]')
+    print(messages)
+    # requests.post('http://192.168.0.145:8000/api/UserMessages//', {'user1': getUsername(userID), 'user2': getUsername(secondUserID), 'threadID': threadID, 'message': messages})
+
+
