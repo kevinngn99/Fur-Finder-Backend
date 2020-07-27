@@ -19,7 +19,7 @@ class ChatConsumer(AsyncConsumer):
         thread_obj= await self.get_thread(me,other_user)
 
         #dispays the thread in the debugger window so that the front end can use
-        postMan( thread_obj.id)
+        postMan(me,other_user,thread_obj.id)
         self.thread_obj = thread_obj
 
         chat_room = f"thread_{thread_obj.id}"
@@ -114,10 +114,10 @@ def getUsername(ID):
     return username[0][0]
 
 
-def postMan(threadID):
+def postMan(userID, secondUserID, threadID):
     messages = getChatMessages(threadID)
     messages = str(messages).strip('[]')
-    print(messages)
-    # requests.post('http://192.168.0.145:8000/api/UserMessages//', {'user1': getUsername(userID), 'user2': getUsername(secondUserID), 'threadID': threadID, 'message': messages})
+    print('Trying to post:', userID,secondUserID,threadID,messages, 'but I commented it out.')
+    #requests.post('http://192.168.0.145:8000/api/UserMessages//', {'user1': userID, 'user2':secondUserID, 'threadID': threadID, 'message': messages})
 
 
