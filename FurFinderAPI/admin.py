@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Pet, PetImage, FidoFinder, HelpingLostPets, LostMyDoggie, PawBoost, PetKey, TabbyTracker
+from .models import Pet, PetImage, FidoFinder, HelpingLostPets, LostMyDoggie, PawBoost, PetKey, TabbyTracker, UserMessages
 
 class PetImageInline(admin.TabularInline):
     model = PetImage
@@ -15,4 +15,4 @@ admin.site.register(LostMyDoggie)
 admin.site.register(PawBoost)
 admin.site.register(PetKey)
 admin.site.register(TabbyTracker)
-#admin.site.register(ReportedPets)
+admin.site.register(UserMessages)
