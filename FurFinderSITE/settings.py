@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'Messaging.chat',
     'channels',
+    'chatt'
 ]
 
 REST_FRAMEWORK = {
@@ -140,7 +141,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": 'redis://h:pa06a24f2686e9a95cd4fb9a0d44f1547b5cfaaf5fdc9fbdb912867807cc11724@ec2-54-209-124-149.compute-1.amazonaws.com:30339'
+            "hosts": ['redis://h:pa06a24f2686e9a95cd4fb9a0d44f1547b5cfaaf5fdc9fbdb912867807cc11724@ec2-54-209-124-149.compute-1.amazonaws.com:30339', 'redis://localhost:6379']
         },
     },
 }
