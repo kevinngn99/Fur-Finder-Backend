@@ -51,10 +51,12 @@ class RegisterViewSet(viewsets.ModelViewSet):
         return Response(data)
 
 
+
 class PetViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]  # a non registered user cannot access this view
     queryset = Pet.objects.all().order_by('date')
     serializer_class = PetSerializer
+    lookup_field = 'petid'
 
     # if we had an edit or delete method we would have to add an author to the post
     # and do the following inside the delete method
@@ -65,6 +67,10 @@ class PetViewSet(viewsets.ModelViewSet):
     # for create we'd only have to set the following
     # account = request.user
     # pet_post = Pet(author=account)
+    #def delete(self, request, pk, format=None):
+    #    snippet = self.get_object(pk)
+    #    snippet.delete()
+    #    return Response(status=status.HTTP_204_NO_CONTENT)
 
     def create(self, request, **kwargs):
 
@@ -89,6 +95,10 @@ class PetViewSet(viewsets.ModelViewSet):
 
         return super().create(request)
 
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class FidoFinderSet(viewsets.ModelViewSet):
     queryset = FidoFinder.objects.all().order_by('date')
