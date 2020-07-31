@@ -45,7 +45,7 @@ class PetSerializer(serializers.HyperlinkedModelSerializer):
         model = Pet
         fields = ('age', 'breed', 'city', 'color', 'date', 'gender', 'images', 'name', 'petid', 'size', 'state', 'status', 'summary', 'zip', 'author')
         extra_kwargs = {
-            'url': {'view_name': 'pets', 'lookup_field': 'name'},
+            'url': {'view_name': 'pets', 'lookup_field': 'petid'},
         }
     def create(self, validated_data):
         image_list = self.context.get('view').request.FILES

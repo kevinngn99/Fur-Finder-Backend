@@ -56,7 +56,7 @@ class PetViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]  # a non registered user cannot access this view
     queryset = Pet.objects.all().order_by('date')
     serializer_class = PetSerializer
-    lookup_field = 'name'
+    lookup_field = 'petid'
 
     # if we had an edit or delete method we would have to add an author to the post
     # and do the following inside the delete method
