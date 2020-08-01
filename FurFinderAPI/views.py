@@ -54,7 +54,7 @@ class RegisterViewSet(viewsets.ModelViewSet):
 
 class PetViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]  # a non registered user cannot access this view
-    queryset = Pet.objects.all().order_by('date')
+    queryset = Pet.objects.all().order_by('-created_date')
     serializer_class = PetSerializer
     lookup_field = 'petid'
 
