@@ -42,7 +42,7 @@ pytoml
 pytz
 requests
 retrying
-setuptools==41.0.0
+setuptools==65.5.1
 six
 soupsieve
 SQLAlchemy
